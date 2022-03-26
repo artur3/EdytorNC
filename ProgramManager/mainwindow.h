@@ -21,43 +21,83 @@
  ***************************************************************************/
 
 
-
-#include "FTPserverWindow.h"
-#include "../QtSingleApplication/qtsingleapplication.h"
-//#include <QApplication>
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
 
-#define LOCALE_PATH         "/usr/share/edytornc/lang/"
+#include <QtWidgets>
+#include <QSettings>
+#include <QFileDialog>
+#include <QMainWindow>
 
+#include "../FileChecker/filechecker.h"
 
-
-int main(int argc, char *argv[])
-{
-    Q_INIT_RESOURCE(application);
-    QtSingleApplication app("FtpServerApp", argc, argv);
-
-    if(app.isRunning())
-        return !app.sendMessage("Show");
-
-    QTranslator qtTranslator; // Try to load Qt translations from QLibraryInfo::TranslationsPath if this fails looks for translations in app dir.
-    if(!qtTranslator.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath)))
-       qtTranslator.load("qt_" + QLocale::system().name(), app.applicationDirPath());
-    app.installTranslator(&qtTranslator);
-
-    QTranslator myappTranslator; // Try to load EdytorNC translations from LOCALE_PATH if this fails looks for translations in app dir.
-    if(!myappTranslator.load("edytornc_" + QLocale::system().name(), LOCALE_PATH))
-       myappTranslator.load("edytornc_" + QLocale::system().name(), app.applicationDirPath());
-    app.installTranslator(&myappTranslator);
-
-    FTPserverWindow *mw = new FTPserverWindow();
-
-    mw->show();
-
-    app.setActivationWindow(mw, true);
-
-    QObject::connect(&app, SIGNAL(messageReceived(const QString&)), mw, SLOT(messReceived(const QString&)));
-
-    QObject::connect(mw, SIGNAL(needToShow()), &app, SLOT(activateWindow()));
-
-    return app.exec();
+namespace Ui {
+class MainWindow;
 }
+
+class MainWindow : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    explicit MainWindow(QWidget *parent = 0);
+    ~MainWindow();
+
+public slots:
+    void messReceived(const QString &text = "");
+
+private slots:
+    void iconActivated(QSystemTrayIcon::ActivationReason reason);
+    void createTrayIcon();
+    void about();
+    void createActions();
+    void quitApp();
+
+    void findFiles();
+
+    void showNewFiles();
+    void browseSaveFolder();
+    void tableCellDoubleClicked(int row, int col);
+
+
+signals:
+    void needToShow();
+
+
+private:
+    Ui::MainWindow *ui;
+
+    QSystemTrayIcon *trayIcon;
+    QMenu *trayIconMenu;
+
+    QAction *closeServerAct;
+    QAction *minimizeAction;
+    QAction *maximizeAction;
+    QAction *restoreAction;
+    QAction *quitAction;
+    QAction *aboutAction;
+    QAction *aboutQtAct;
+    QAction *startMinimizedAction;
+    QAction *reloadAct;
+    QAction *stopServerAct;
+    QAction *configPortAct;
+    QAction *browseSaveFolderAct;
+    QAction *showNewFilesAct;
+    QComboBox *configBox;
+    QToolBar *fileToolBar;
+
+    QProcess *edytorProc;
+
+    QStringList extensions;
+    QString mainPath;
+    QString downloadPath;
+
+    void findFiles(const QString startDir, QStringList fileFilter);
+    void loadSerialConfignames();
+    void getPathFromConfig();
+    void openInEditor(QString files);
+
+};
+
+#endif // MAINWINDOW_H

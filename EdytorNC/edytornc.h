@@ -175,6 +175,7 @@ private slots:
     void clipboardTreeViewContextMenu(const QPoint &point);
     void doShowInLineCalc();
     void watchFile(const QString& fileName, bool add);
+    void startProgramManager();
 
 signals:
     void needToShow();
@@ -314,10 +315,14 @@ private:
     QAction *diffRAct;
     QAction *diffAct;
     QAction *diffEditorAct;
+    QAction *commAppAct;
+    QAction *FTPAppAct;
+    QAction *ProgManAppAct;
 
     QProcess *proc;
     QProcess *sfsProc;
     QProcess *FTPserverProc;
+    QProcess *ProgManProc;
     QDir lastDir;
 
     QLabel *labelStat1;
@@ -354,8 +359,6 @@ private:
     QAction *deAttachToDirAct;
     QAction *diagAct;
     QAction *serialCloseAct;
-    QAction *commAppAct;
-    QAction *FTPAppAct;
     QComboBox *configBox;
 
     QStringList selectedExpressions;

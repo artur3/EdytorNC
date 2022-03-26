@@ -20,12 +20,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <QCoreApplication>
 
-
-#include "FTPserverWindow.h"
+#include "mainwindow.h"
 #include "../QtSingleApplication/qtsingleapplication.h"
-//#include <QApplication>
-
 
 #define LOCALE_PATH         "/usr/share/edytornc/lang/"
 
@@ -34,7 +32,7 @@
 int main(int argc, char *argv[])
 {
     Q_INIT_RESOURCE(application);
-    QtSingleApplication app("FtpServerApp", argc, argv);
+    QtSingleApplication app("ProgramManagerApp", argc, argv);
 
     if(app.isRunning())
         return !app.sendMessage("Show");
@@ -49,7 +47,7 @@ int main(int argc, char *argv[])
        myappTranslator.load("edytornc_" + QLocale::system().name(), app.applicationDirPath());
     app.installTranslator(&myappTranslator);
 
-    FTPserverWindow *mw = new FTPserverWindow();
+    MainWindow *mw = new MainWindow();
 
     mw->show();
 

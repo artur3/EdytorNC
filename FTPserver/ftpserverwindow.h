@@ -107,6 +107,7 @@ private:
     QAction *restoreAction;
     QAction *quitAction;
     QAction *aboutAction;
+    QAction *aboutQtAct;
     QAction *startMinimizedAction;
     QAction *resetServerAct;
     QAction *stopServerAct;

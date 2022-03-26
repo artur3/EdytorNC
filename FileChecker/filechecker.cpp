@@ -115,6 +115,9 @@ void FileChecker::findFiles(const QString startDir, QStringList fileFilter)
     QString line;
     QStringList files;
 
+
+    QApplication::setOverrideCursor(Qt::BusyCursor);
+
     QStringList labels;
     labels << tr("File Name") << tr("Info") << tr("Accept") << tr("Delete") << tr("Status") << tr("Size") << tr("Modification date");
     ui->fileTableWidget->setColumnCount(labels.size());
@@ -246,6 +249,7 @@ void FileChecker::findFiles(const QString startDir, QStringList fileFilter)
     ui->fileTableWidget->resizeRowsToContents();
     ui->fileTableWidget->resizeColumnsToContents();
 
+    QApplication::restoreOverrideCursor();
 }
 
 //**************************************************************************************************

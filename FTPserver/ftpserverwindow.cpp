@@ -318,6 +318,10 @@ void FTPserverWindow::createActions()
     aboutAction->setToolTip(tr("Show the application's About box"));
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
 
+    aboutQtAct = new QAction(tr("About &Qt"), this);
+    aboutQtAct->setToolTip(tr("Show the Qt library's About box"));
+    connect(aboutQtAct, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+
     minimizeAction = new QAction(tr("Mi&nimize"), this);
     connect(minimizeAction, SIGNAL(triggered()), this, SLOT(hide()));
 

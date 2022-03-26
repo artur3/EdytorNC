@@ -22,6 +22,10 @@ FTPserver.subdir = FTPserver
 FTPserver.target = FTPserver
 FTPserver.depends = QtSingleApplication FileChecker
 
+ProgramManager.subdir = ProgramManager
+ProgramManager.target = ProgramManager
+ProgramManager.depends = QtSingleApplication KDiff3App FileChecker
+
 EdytorNC.subdir = EdytorNC
 EdytorNC.target = EdytorNC
 EdytorNC.depends = QtSingleApplication KDiff3App SerialPortCommon SerialPortFileServer
@@ -34,7 +38,9 @@ SUBDIRS += \
     FTPserver \
     SerialPortCommon\
     SerialPortFileServer \
-    EdytorNC \
+    ProgramManager \
+    EdytorNC
+
 
 
 RESOURCES += \

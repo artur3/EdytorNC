@@ -2083,6 +2083,23 @@ void EdytorNc::createActions()
     aboutQtAct = new QAction(tr("About &Qt"), this);
     aboutQtAct->setToolTip(tr("Show the Qt library's About box"));
     connect(aboutQtAct, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+
+
+    commAppAct = new QAction(QIcon(":/images/serial.svg"), tr("Start application \"Serial port file server\""), this);
+    //commAppAct->setShortcut(tr("F3"));
+    commAppAct->setToolTip(tr("Start application \"Serial port file server\""));
+    connect(commAppAct, SIGNAL(triggered()), this, SLOT(startSerialPortServer()));
+
+    FTPAppAct = new QAction(QIcon(":/images/ftp.svg"), tr("Start application \"FTP file server\""), this);
+    //FTPAppAct->setShortcut(tr("F3"));
+    FTPAppAct->setToolTip(tr("Start application \"FTP file server\""));
+    connect(FTPAppAct, SIGNAL(triggered()), this, SLOT(startFTPServer()));
+
+    ProgManAppAct = new QAction(QIcon(":/images/ftp.svg"), tr("Start application \"CNC Program Manager\""), this);
+    //ProgManAppAct->setShortcut(tr("F3"));
+    ProgManAppAct->setToolTip(tr("Start application \"CNC Program Manager\""));
+    connect(ProgManAppAct, SIGNAL(triggered()), this, SLOT(startProgramManager()));
+
 }
 
 //**************************************************************************************************
@@ -2178,6 +2195,10 @@ void EdytorNc::createMenus()
     toolsMenu->addSeparator();
     toolsMenu->addAction(inLineCalcAct);
     toolsMenu->addAction(calcAct);
+    toolsMenu->addSeparator();
+    toolsMenu->addAction(commAppAct);
+    toolsMenu->addAction(FTPAppAct);
+    toolsMenu->addAction(ProgManAppAct);
 
     windowMenu = menuBar()->addMenu(tr("&Window"));
     updateWindowMenu();
@@ -3087,16 +3108,6 @@ void EdytorNc::createSerialToolBar()
         serialCloseAct = new QAction(QIcon(":/images/close_small.svg"), tr("Close send/receive toolbar"), this);
         serialCloseAct->setToolTip(tr("Close send/receive toolbar"));
         connect(serialCloseAct, SIGNAL(triggered()), this, SLOT(closeSerialToolbar()));
-
-        commAppAct = new QAction(QIcon(":/images/serial.svg"), tr("Start application \"Serial port file server\""), this);
-        //diagAct->setShortcut(tr("F3"));
-        commAppAct->setToolTip(tr("Start application \"Serial port file server\""));
-        connect(commAppAct, SIGNAL(triggered()), this, SLOT(startSerialPortServer()));
-
-        FTPAppAct = new QAction(QIcon(":/images/ftp.svg"), tr("Start application \"FTP file server\""), this);
-        //diagAct->setShortcut(tr("F3"));
-        FTPAppAct->setToolTip(tr("Start application \"FTP file server\""));
-        connect(FTPAppAct, SIGNAL(triggered()), this, SLOT(startFTPServer()));
 
         configBox = new QComboBox();
         configBox->setSizeAdjustPolicy(QComboBox::AdjustToContents);
@@ -4727,12 +4738,12 @@ void EdytorNc::startSerialPortServer()
 
 
 
-    sfsProc = findChild<QProcess *>("sfs");
+    sfsProc = findChild<QProcess *>("SerialPortFileServerApp");
 
     if(!sfsProc)
     {
         sfsProc = new QProcess(this);
-        sfsProc->setObjectName("sfs");
+        sfsProc->setObjectName("SerialPortFileServerApp");
         sfsProc->setWorkingDirectory(path);
         sfsProc->startDetached(fileName);
 
@@ -4771,12 +4782,12 @@ void EdytorNc::startFTPServer()
 
 
 
-    FTPserverProc = findChild<QProcess *>("FTPserver");
+    FTPserverProc = findChild<QProcess *>("FTPserverApp");
 
     if(!FTPserverProc)
     {
         FTPserverProc = new QProcess(this);
-        FTPserverProc->setObjectName("FTPserver");
+        FTPserverProc->setObjectName("FTPserverApp");
         FTPserverProc->setWorkingDirectory(path);
         FTPserverProc->startDetached(fileName);
 
@@ -4788,6 +4799,48 @@ void EdytorNc::startFTPServer()
         {
             FTPserverProc->setWorkingDirectory(path);
             FTPserverProc->startDetached(fileName);
+        };
+
+}
+
+//**************************************************************************************************
+//
+//**************************************************************************************************
+
+void EdytorNc::startProgramManager()
+{
+
+    QString fileName, path;
+
+    path = QApplication::applicationDirPath() + "/";
+    path = QDir::toNativeSeparators(path);
+
+#ifdef Q_OS_LINUX
+    fileName = path + "FTPserver";
+#endif
+
+#ifdef Q_OS_WIN32
+    fileName = "ProgramManager.exe";
+#endif
+
+
+    ProgManProc = findChild<QProcess *>("ProgManApp");
+
+    if(!ProgManProc)
+    {
+        ProgManProc = new QProcess(this);
+        ProgManProc->setObjectName("ProgManApp");
+        ProgManProc->setWorkingDirectory(path);
+        ProgManProc->startDetached(fileName);
+
+//        qDebug() << QDir::toNativeSeparators(path) << fileName << sfsProc;
+//        qDebug() << sfsProc->errorString() << sfsProc->error();
+    }
+    else
+        if(ProgManProc->pid() == 0)
+        {
+            ProgManProc->setWorkingDirectory(path);
+            ProgManProc->startDetached(fileName);
         };
 
 }
