@@ -2,10 +2,6 @@ EdytorNC is text editor for CNC machine programmer.
 Old code repository http://sourceforge.net/projects/edytornc/
 Any user feedback are welcomed.
 
-
-Source code of EdytorNC can be downloaded from SVN server on sourceforge.net (http://sourceforge.net/p/edytornc/code/HEAD/tree/)
-
-
 Some features :
     *   Bolt holes calculation
     *   Solutions of triangles calculation
