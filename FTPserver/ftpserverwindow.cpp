@@ -25,7 +25,7 @@
 ****************************************************************************/
 
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Artur Kozioł                               *
+ *   Copyright (C) 2006-2024 by Artur Kozioł                               *
  *   artkoz78@gmail.com                                                    *
  *                                                                         *
  *   This file is part of EdytorNC.                                        *
@@ -137,7 +137,7 @@ void FTPserverWindow::loadSettings()
 #endif
 
 
-    QSettings settings("EdytorNC", "EdytorNC");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
 
     settings.beginGroup("FTPConfigs");
 
@@ -166,7 +166,7 @@ void FTPserverWindow::loadSettings()
 //**************************************************************************************************
 void FTPserverWindow::saveSettings()
 {
-//    QSettings settings("EdytorNC", "EdytorNC");
+//    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
 //    settings.setValue("FTPserver/port", ui->lineEditPort->text());
 //    settings.setValue("FTPserver/username", ui->lineEditUserName->text());
 //    settings.setValue("FTPserver/password", ui->lineEditPassword->text());
@@ -311,15 +311,15 @@ void FTPserverWindow::appendText(QtMsgType type, const QString &text)
 void FTPserverWindow::createActions()
 {
     closeServerAct = new QAction(QIcon(":/images/window-close.svg"), tr("&Minimize to tray"), this);
-    closeServerAct->setToolTip(tr("Minimize to system tray"));
+    closeServerAct->setStatusTip(tr("Minimize to system tray"));
     connect(closeServerAct, SIGNAL(triggered()), this, SLOT(hide()));
 
     aboutAction = new QAction(tr("&About"), this);
-    aboutAction->setToolTip(tr("Show the application's About box"));
+    aboutAction->setStatusTip(tr("Show the application's About box"));
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
 
     aboutQtAct = new QAction(tr("About &Qt"), this);
-    aboutQtAct->setToolTip(tr("Show the Qt library's About box"));
+    aboutQtAct->setStatusTip(tr("Show the Qt library's About box"));
     connect(aboutQtAct, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 
     minimizeAction = new QAction(tr("Mi&nimize"), this);
@@ -335,20 +335,20 @@ void FTPserverWindow::createActions()
     connect(quitAction, SIGNAL(triggered()), this, SLOT(quitApp()));
 
     resetServerAct = new QAction(QIcon(":/images/reset.svg"), tr("&Reset"), this);
-    resetServerAct->setToolTip(tr("Restart server"));
+    resetServerAct->setStatusTip(tr("Restart server"));
     connect(resetServerAct, SIGNAL(triggered()), this, SLOT(pushButtonRestartServer_clicked()));
 
     configPortAct = new QAction(QIcon(":/images/serialconfig.png"), tr("Serial port configuration"), this);
-    configPortAct->setToolTip(tr("Serial port configuration"));
+    configPortAct->setStatusTip(tr("Serial port configuration"));
     connect(configPortAct, SIGNAL(triggered()), this, SLOT(configPushButton_clicked()));
 
 
     browseSaveFolderAct = new QAction(QIcon(":/images/browse.png"), tr("&Browse save folder"), this);
-    browseSaveFolderAct->setToolTip(tr("Browse save folder"));
+    browseSaveFolderAct->setStatusTip(tr("Browse save folder"));
     connect(browseSaveFolderAct, SIGNAL(triggered()), this, SLOT(browseSaveFolder()));
 
     showNewFilesAct = new QAction(QIcon(":/images/download.svg"), tr("&Show saved files"), this);
-    showNewFilesAct->setToolTip(tr("Show saved files"));
+    showNewFilesAct->setStatusTip(tr("Show saved files"));
     connect(showNewFilesAct, SIGNAL(triggered()), this, SLOT(showNewFiles()));
 
 
@@ -367,24 +367,26 @@ void FTPserverWindow::createActions()
     connect(configBox, SIGNAL(currentIndexChanged(int)), SLOT(changeActiveWindow()));
 
 
-    //ui->toolBar->setStyleSheet("QToolBar{spacing:25px;}");
-
+    ui->toolBar->setStyleSheet("QToolBar{spacing:15px;}");
 
     ui->toolBar->addAction(configPortAct);
     ui->toolBar->addSeparator();
     ui->toolBar->addAction(resetServerAct);
+    ui->toolBar->addSeparator();
 
 
-    fileToolBar = new QToolBar(tr("FileToolBar"));
-    addToolBar(Qt::TopToolBarArea, fileToolBar);
-    fileToolBar->setObjectName("FileToolBar");
+//    fileToolBar = new QToolBar(tr("FileToolBar"));
+//    fileToolBar->setStyleSheet("QToolBar{spacing:10px;}");
+//    addToolBar(Qt::TopToolBarArea, fileToolBar);
+//    fileToolBar->setObjectName("FileToolBar");
 
-    fileToolBar->addWidget(configBox);
-    fileToolBar->addAction(browseSaveFolderAct);
-    fileToolBar->addAction(showNewFilesAct);
-    fileToolBar->addSeparator();
-
-    fileToolBar->addAction(closeServerAct);
+    ui->toolBar->addWidget(configBox);
+    ui->toolBar->addSeparator();
+    ui->toolBar->addAction(browseSaveFolderAct);
+    ui->toolBar->addSeparator();
+    ui->toolBar->addAction(showNewFilesAct);
+    ui->toolBar->addSeparator();
+    ui->toolBar->addAction(closeServerAct);
 
 
 
@@ -396,6 +398,7 @@ void FTPserverWindow::createActions()
     ui->menu_File->addAction(quitAction);
 
     ui->menu_Help->addAction(aboutAction);
+    ui->menu_Help->addAction(aboutQtAct);
 
     loadSerialConfignames();
     configBox->adjustSize();
@@ -417,8 +420,13 @@ void FTPserverWindow::createTrayIcon()
     trayIconMenu->addSeparator();
     trayIconMenu->addAction(quitAction);
 
+    trayIconMenu->setToolTipsVisible(true);
+
+
     trayIcon = new QSystemTrayIcon(this);
     trayIcon->setContextMenu(trayIconMenu);
+    trayIcon->setToolTip(tr("FTP server for CNC machines"));
+
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
 
     trayIcon->setIcon(QIcon(":/images/ftp.svg"));
@@ -471,7 +479,7 @@ void FTPserverWindow::about()
                        tr("The <b>EdytorNC</b> is text editor for CNC programmers.") +
 //                       tr("<P>Version: same as EdytorNC") +
                        tr("<P>Version: %1.%2.%3").arg(VERSION_MAJOR).arg(VERSION_MINOR).arg(VERSION_BUILD) +
-                       tr("<P>Copyright (C) 1998 - 2022 by <a href=\"mailto:artkoz78@gmail.com\">Artur Kozioł</a>") +
+                       tr("<P>Copyright (C) 1998 - 2024 by <a href=\"mailto:artkoz78@gmail.com\">Artur Kozioł</a>") +
                        tr("<P>QFtpServer Copyright (c) 2020 by <a href=\"https://github.com/sashoalm/QFtpServer\">Alexander Almaleh</a>") +
                        tr("<P>") +
                        //tr("<a href='https://www.flaticon.com/' title='Some icons'>Some icons created by inkubators - flaticon.com</a>") +
@@ -567,7 +575,7 @@ void FTPserverWindow::showNewFiles()
     {
         if((!list[0].isEmpty() && !list[1].isEmpty()) && (list[0] != list[1]))
         {
-            QSettings settings("EdytorNC", "EdytorNC");
+            QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
             QStringList extensions = settings.value("Extensions", "").toStringList();
             extensions.removeDuplicates();
             extensions.sort();
@@ -610,7 +618,7 @@ void FTPserverWindow::loadSerialConfignames()
     QStringList list;
     QString item;
 
-    QSettings settings("EdytorNC", "EdytorNC");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
     settings.beginGroup("FTPConfigs");
 
     configBox->clear();
@@ -634,7 +642,7 @@ QStringList FTPserverWindow::getPathFromConfig()
     QStringList list;
     QString rootPath, dir1;
 
-    QSettings settings("EdytorNC", "EdytorNC");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
     settings.beginGroup("FTPConfigs");
 
     rootPath = settings.value("RootPath", QDir::rootPath()).toString();

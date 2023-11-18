@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Artur Kozioł                               *
+ *   Copyright (C) 2006-2024 by Artur Kozioł                               *
  *   artkoz78@gmail.com                                                    *
  *                                                                         *
  *   This file is part of EdytorNC.                                        *
@@ -83,7 +83,7 @@ cleanUpDialog::cleanUpDialog(QWidget *parent) :
     selectedExpressions.clear();
 
 
-    QSettings settings("EdytorNC", "EdytorNC");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
 
     settings.beginGroup("CleanUpDialog");
 
@@ -300,7 +300,7 @@ void cleanUpDialog::okButtonClicked()
         };
     };
 
-    QSettings settings("EdytorNC", "EdytorNC");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
     settings.beginGroup("CleanUpDialog");
 
     settings.setValue("Expressions", expressions);

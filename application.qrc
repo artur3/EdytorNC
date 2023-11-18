@@ -110,5 +110,6 @@
         <file>images/ftp.svg</file>
         <file>images/serial.svg</file>
         <file>images/programmanager.svg</file>
+        <file>images/refresh.png</file>
     </qresource>
 </RCC>

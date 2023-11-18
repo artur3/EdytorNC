@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Artur Kozioł                               *
+ *   Copyright (C) 2006-2024 by Artur Kozioł                               *
  *   artkoz78@gmail.com                                                    *
  *                                                                         *
  *   This file is part of EdytorNC.                                        *
@@ -44,7 +44,7 @@ newFileDialog::newFileDialog(QWidget *parent) :
         path.setPath(QDir::homePath());
 
 
-    QSettings settings("EdytorNC", "EdytorNC");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
 
 
     QDir savedPath(settings.value("TemplatePath", path.canonicalPath()).toString());
@@ -108,7 +108,7 @@ void newFileDialog::fillFileCombo()
 
 void newFileDialog::saveSettings()
 {
-    QSettings settings("EdytorNC", "EdytorNC");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
 
     settings.setValue("TemplatePath", path.canonicalPath());
 }

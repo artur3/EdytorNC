@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Artur Kozioł                               *
+ *   Copyright (C) 2006-2024 by Artur Kozioł                               *
  *   artkoz78@gmail.com                                                    *
  *                                                                         *
  *   This file is part of EdytorNC.                                        *
@@ -377,7 +377,7 @@ void FindInFiles::closeEvent(QCloseEvent *event)
    QStringList list;
    QString item;
 
-   QSettings settings("EdytorNC", "EdytorNC");
+   QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
    settings.beginGroup("FindFileDialog");
 
    settings.setValue("WholeWords", wholeWordsCheckBox->isChecked());
@@ -456,7 +456,7 @@ void FindInFiles::readSettings()
    directoryComboBox->clear();
    fileComboBox->clear();
 
-   QSettings settings("EdytorNC", "EdytorNC");
+   QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
 
    intCapsLock = settings.value("IntCapsLock", true).toBool();
 

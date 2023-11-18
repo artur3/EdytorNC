@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Artur Kozioł                               *
+ *   Copyright (C) 2006-2024 by Artur Kozioł                               *
  *   artkoz78@gmail.com                                                    *
  *                                                                         *
  *   This file is part of EdytorNC.                                        *
@@ -73,7 +73,7 @@ struct FtpSettings
 //    QString removeFromRecieved;
 };
 
-class FtpConfigDialog : public QDialog, private Ui::SerialPortConfigDialog
+class FtpConfigDialog : public QDialog, private Ui::FtpConfigDialog
 {
    Q_OBJECT
 
@@ -124,6 +124,9 @@ class FtpConfigDialog : public QDialog, private Ui::SerialPortConfigDialog
      void readPath1Changed(const QString text);
      void readPath2Changed(const QString text);
      void readPath3Changed(const QString text);
+     void refreshRelativePath();
+     void refreshSavePath();
+
 
 private:
      QString browseForDir(const QString dir, QString windowTitle);

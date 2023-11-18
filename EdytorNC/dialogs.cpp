@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Artur Kozioł                               *
+ *   Copyright (C) 2006-2024 by Artur Kozioł                               *
  *   artkoz78@gmail.com                                                    *
  *                                                                         *
  *   This file is part of EdytorNC.                                        *
@@ -64,7 +64,7 @@ I2MDialog::I2MDialog(QWidget * parent, Qt::WindowFlags f) : QDialog(parent, f)
    setAttribute(Qt::WA_DeleteOnClose);
    setWindowTitle(tr("Inch to metric"));
 
-   QSettings settings("EdytorNC", "EdytorNC");
+   QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
    settings.beginGroup("Inch2mm");
    inchCheckBox->setChecked(settings.value("Inch", true).toBool());
    mmCheckBox->setChecked(!settings.value("Inch", true).toBool());
@@ -90,7 +90,7 @@ I2MDialog::I2MDialog(QWidget * parent, Qt::WindowFlags f) : QDialog(parent, f)
 
 I2MDialog::~I2MDialog()
 {
-    QSettings settings("EdytorNC", "EdytorNC");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
     settings.beginGroup("Inch2mm");
     settings.setValue("Inch", inchCheckBox->isChecked());
     settings.endGroup();
@@ -228,7 +228,7 @@ FeedsDialog::FeedsDialog( QWidget * parent, Qt::WindowFlags f) : QDialog(parent,
    setAttribute(Qt::WA_DeleteOnClose);
    setWindowTitle(tr("Cutting parameters"));
 
-   QSettings settings("EdytorNC", "EdytorNC");
+   QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
    settings.beginGroup("FeedSpeedDialog");
    mmCheckBox->setChecked(settings.value("MM", true).toBool());
    inchCheckBox->setChecked(!settings.value("MM", true).toBool());
@@ -291,7 +291,7 @@ FeedsDialog::FeedsDialog( QWidget * parent, Qt::WindowFlags f) : QDialog(parent,
 
 FeedsDialog::~FeedsDialog()
 {
-    QSettings settings("EdytorNC", "EdytorNC");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
     settings.beginGroup("FeedSpeedDialog");
     settings.setValue("MM", mmCheckBox->isChecked());
     settings.endGroup();
@@ -530,7 +530,7 @@ RenumberDialog::RenumberDialog(QWidget * parent, Qt::WindowFlags f) : QDialog(pa
    //okButton->setEnabled(formInput->hasAcceptableInput());
 
 
-   QSettings settings("EdytorNC", "EdytorNC");
+   QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
    settings.beginGroup("RenumberDialog" );
 
 
@@ -586,7 +586,7 @@ RenumberDialog::~RenumberDialog()
 void RenumberDialog::okButtonClicked()
 {
 
-   QSettings settings("EdytorNC", "EdytorNC");
+   QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
    settings.beginGroup("RenumberDialog" );
 
    settings.setValue("StartAt", startAtInput->value());
@@ -2139,7 +2139,7 @@ BHCDialog::BHCDialog(QWidget *parent, Qt::WindowFlags f) : QDialog(parent, f)
    tabBar->addTab(page4, tr("Circle 4 - yellow"));
 
 
-   QSettings settings("EdytorNC", "EdytorNC");
+   QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
    settings.beginGroup("BHC");
 
    for(int tabId = 0; tabId < tabBar->count(); tabId++)
@@ -2185,7 +2185,7 @@ BHCDialog::BHCDialog(QWidget *parent, Qt::WindowFlags f) : QDialog(parent, f)
 BHCDialog::~BHCDialog()
 {
 
-    QSettings settings("EdytorNC", "EdytorNC");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
     settings.beginGroup("BHC");
 
     for(int tabId = 0; tabId < tabBar->count(); tabId++)

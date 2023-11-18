@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Artur Kozioł                               *
+ *   Copyright (C) 2006-2024 by Artur Kozioł                               *
  *   artkoz78@gmail.com                                                    *
  *                                                                         *
  *   This file is part of EdytorNC.                                        *
@@ -113,11 +113,11 @@ void SPFSMainWindow::saveSettings()
     foreach(QMdiSubWindow *window, ui->mdiArea->subWindowList())
     {
         SerialTransmissionDialog *mdiChild = qobject_cast<SerialTransmissionDialog *>(window->widget());
-        if(mdiChild > NULL)
+        if(mdiChild > (void *) NULL)
             activeConfigs.append(mdiChild->configName());
     };
 
-    QSettings settings("EdytorNC", "EdytorNC");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
     settings.beginGroup("SPFSMainWindow");
     settings.setValue("StartMinimized", startMinimizedAction->isChecked());
     settings.remove("ActiveConfigs");
@@ -133,7 +133,7 @@ void SPFSMainWindow::saveSettings()
 
 void SPFSMainWindow::loadSettings()
 {
-    QSettings settings("EdytorNC", "EdytorNC");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
     settings.beginGroup("SPFSMainWindow");
 
     startMinimizedAction->setChecked(settings.value("StartMinimized", false).toBool());
@@ -196,7 +196,7 @@ void SPFSMainWindow::stopSerialPortServer()
     QString _config = configBox->currentText();
 
     SerialTransmissionDialog *_existing = findMdiChild(_config);
-    if(_existing > NULL)
+    if(_existing > (void *) NULL)
     {
         _existing->close();
         _existing->parentWidget()->close();
@@ -241,7 +241,7 @@ void SPFSMainWindow::createActions()
     connect(browseSaveFolderAct, SIGNAL(triggered()), this, SLOT(browseSaveFolder()));
 
     showNewFilesAct = new QAction(QIcon(":/images/download.svg"), tr("&Show saved files"), this);
-    showNewFilesAct->setToolTip(tr("Show saved files"));
+    showNewFilesAct->setToolTip(tr("Show received files"));
     connect(showNewFilesAct, SIGNAL(triggered()), this, SLOT(showNewFiles()));
 
     aboutAction = new QAction(tr("&About"), this);
@@ -303,6 +303,7 @@ void SPFSMainWindow::createActions()
     ui->menu_File->addAction(quitAction);
 
     ui->menu_Help->addAction(aboutAction);
+    ui->menu_Help->addAction(aboutQtAct);
 
 
     loadSerialConfignames();
@@ -335,7 +336,7 @@ void SPFSMainWindow::loadSerialConfignames()
     QStringList list;
     QString item;
 
-    QSettings settings("EdytorNC", "EdytorNC");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
     settings.beginGroup("SerialPortConfigs");
 
     configBox->clear();
@@ -359,8 +360,8 @@ void SPFSMainWindow::loadSerialConfignames()
 //    int id;
 //    QDir dir;
 
-//    bool hasMdiChild = (activeMdiChild() != NULL);
-//    if(hasMdiChild && (serialToolBar > NULL))
+//    bool hasMdiChild = (activeMdiChild() != (void *) NULL);
+//    if(hasMdiChild && (serialToolBar > (void *) NULL))
 //    {
 //        dir.setPath(activeMdiChild()->filePath());
 //        dir.setFilter(QDir::Files | QDir::Hidden | QDir::NoSymLinks);
@@ -408,7 +409,7 @@ SerialTransmissionDialog *SPFSMainWindow::findMdiChild(const QString __config)
     foreach(QMdiSubWindow *window, ui->mdiArea->subWindowList())
     {
         SerialTransmissionDialog *mdiChild = qobject_cast<SerialTransmissionDialog *>(window->widget());
-        if(mdiChild > NULL)
+        if(mdiChild > (void *) NULL)
             if(mdiChild->configName() == __config)
                 return mdiChild;
     };
@@ -440,7 +441,7 @@ SerialTransmissionDialog *SPFSMainWindow::activeMdiChild()
     {
         SerialTransmissionDialog *mdiChild = findMdiChild(configBox->currentText());
 
-        if(mdiChild > NULL)
+        if(mdiChild > (void *) NULL)
         {
            return mdiChild;
         };
@@ -460,7 +461,7 @@ void SPFSMainWindow::activeWindowChanged(QMdiSubWindow *window)
 
     SerialTransmissionDialog *mdiChild = qobject_cast<SerialTransmissionDialog *>(window->widget()); //activeMdiChild();
 
-    if(mdiChild > NULL)
+    if(mdiChild > (void *) NULL)
     {
         mdiChild->setFocus();
 
@@ -498,7 +499,7 @@ void SPFSMainWindow::changeActiveWindow()
 {
     SerialTransmissionDialog *mdiChild = findMdiChild(configBox->currentText());
 
-    if(mdiChild > NULL)
+    if(mdiChild > (void *) NULL)
     {
         mdiChild->setFocus();
         configPortAct->setEnabled(false);
@@ -526,7 +527,7 @@ void SPFSMainWindow::changeActiveWindow()
 void SPFSMainWindow::closeTab(int i)
 {
     QTabBar* tab = ui->mdiArea->findChild<QTabBar*>();
-    if(tab > NULL)
+    if(tab > (void *) NULL)
     {
         tab->removeTab(i);
     };
@@ -539,7 +540,7 @@ void SPFSMainWindow::closeTab(int i)
 void SPFSMainWindow::doPortReset()
 {
     SerialTransmissionDialog *mdiChild = activeMdiChild();
-    if(mdiChild > NULL)
+    if(mdiChild > (void *) NULL)
         mdiChild->portReset();
 }
 
@@ -552,11 +553,11 @@ void SPFSMainWindow::showNewFiles()
     ui->mdiArea->setFocus();
     SerialTransmissionDialog *mdiChild = activeMdiChild();
 
-    if(mdiChild > NULL)
+    if(mdiChild > (void *) NULL)
     {
         if((!mdiChild->savePath().isEmpty() && !mdiChild->readPaths().isEmpty()))
         {
-            QSettings settings("EdytorNC", "EdytorNC");
+            QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
             QStringList extensions = settings.value("Extensions", "").toStringList();
             extensions.removeDuplicates();
             extensions.sort();
@@ -577,7 +578,7 @@ void SPFSMainWindow::showNewFiles()
 void SPFSMainWindow::browseSaveFolder()
 {
     SerialTransmissionDialog *mdiChild = activeMdiChild();
-    if(mdiChild > NULL)
+    if(mdiChild > (void *) NULL)
         QDesktopServices::openUrl(QUrl(QString("file:///%1").arg(mdiChild->savePath()), QUrl::TolerantMode));
 }
 
@@ -598,6 +599,8 @@ void SPFSMainWindow::createTrayIcon()
 
     trayIcon = new QSystemTrayIcon(this);
     trayIcon->setContextMenu(trayIconMenu);
+    trayIcon->setToolTip(tr("RS232 transmission server for CNC machines"));
+
     connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
 
     trayIcon->setIcon(QIcon(":/images/serial.svg"));
@@ -638,7 +641,7 @@ void SPFSMainWindow::quitApp()
     foreach(const QMdiSubWindow *window, ui->mdiArea->subWindowList(QMdiArea::StackingOrder))
     {
         SerialTransmissionDialog *mdiChild = qobject_cast<SerialTransmissionDialog *>(window->widget());
-        if(mdiChild != NULL)
+        if(mdiChild != (void *) NULL)
         {
             mdiChild->close();
             mdiChild->parentWidget()->close();

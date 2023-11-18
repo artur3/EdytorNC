@@ -25,7 +25,7 @@
 ****************************************************************************/
 
 /***************************************************************************
- *   Copyright (C) 2022-2022 by Artur Kozioł                               *
+ *   Copyright (C) 2022-2024 by Artur Kozioł                               *
  *   artkoz78@gmail.com                                                    *
  *                                                                         *
  *   This file is part of EdytorNC.                                        *
@@ -61,11 +61,11 @@ FtpRetrCommand::FtpRetrCommand(QObject *parent, const QString &fileName, FtpSett
     QFileInfo fileInfo;
     QString ext;
 
-    if(fName.count('.') > 1)  //check for and remove second extension (if added automatically by machine)
+
+    while(fName.count('.') > 1)  //remove other extensions (if added automatically by cnc control)
     {
-        ext = fileInfo.suffix();
-        ext.prepend('.');
-        fName.remove(ext);
+        int pos = fName.lastIndexOf('.');
+        fName.remove(pos, fName.length() - pos);
     };
 
     qDebug() << "***** 452 FtpRetrCommand: " << fileName << fName;

@@ -25,7 +25,7 @@
 ****************************************************************************/
 
 /***************************************************************************
- *   Copyright (C) 2022-2022 by Artur Kozioł                               *
+ *   Copyright (C) 2022-2024 by Artur Kozioł                               *
  *   artkoz78@gmail.com                                                    *
  *                                                                         *
  *   This file is part of EdytorNC.                                        *
@@ -700,7 +700,7 @@ void FtpControlConnection::loadSettings()
 
     QStringList list;
 
-    QSettings settings("EdytorNC", "EdytorNC");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
 
     settings.beginGroup("FTPConfigs");
 

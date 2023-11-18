@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Artur Kozioł                               *
+ *   Copyright (C) 2006-2024 by Artur Kozioł                               *
  *   artkoz78@gmail.com                                                    *
  *                                                                         *
  *   This file is part of EdytorNC.                                        *
@@ -200,7 +200,7 @@ void SerialPortConfigDialog::saveButtonClicked()
     QStringList list;
     QString item, curItem;
 
-    QSettings settings("EdytorNC", "EdytorNC");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
 
     settings.beginGroup("SerialPortConfigs");
 
@@ -326,6 +326,7 @@ void SerialPortConfigDialog::saveButtonClicked()
     };
     eList.removeDuplicates();
     eList.sort();
+    eList.append("");
     settings.setValue("FileNameMask", eList);
 
     eList.clear();
@@ -394,7 +395,7 @@ void SerialPortConfigDialog::changeSettings()
     QString item, port;
     QStringList list;
 
-    QSettings settings("EdytorNC", "EdytorNC");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
 
     QStringList extensions = settings.value("Extensions", (QStringList() << "*.nc" << "*.cnc")).toStringList();
     extensions.removeDuplicates();
@@ -625,7 +626,7 @@ void SerialPortConfigDialog::loadSettings()
     int id;
     QStringList list;
 
-    QSettings settings("EdytorNC", "EdytorNC");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
 
     settings.beginGroup("SerialPortConfigs");
 
@@ -686,7 +687,7 @@ void SerialPortConfigDialog::portNameComboBoxIndexChanged(QString name)
 
 void SerialPortConfigDialog::deleteButtonClicked()
 {
-    QSettings settings("EdytorNC", "EdytorNC");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
 
     settings.beginGroup("SerialPortConfigs");
     settings.remove(configNameBox->currentText());
@@ -702,7 +703,7 @@ void SerialPortConfigDialog::deleteButtonClicked()
 
 void SerialPortConfigDialog::closeButtonClicked()
 {
-   QSettings settings("EdytorNC", "EdytorNC");
+   QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
    settings.beginGroup("SerialPortConfigs");
    settings.setValue("CurrentSerialPortSettings", configNameBox->currentText());
    settings.endGroup();

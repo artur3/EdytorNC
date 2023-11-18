@@ -4,7 +4,9 @@
 #
 #-------------------------------------------------
 
-QT += core gui network
+QT += core gui network sql svg
+
+QTPLUGIN += QPSQL QSQLITE
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -17,6 +19,8 @@ TEMPLATE = app
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
 
+
+
 # You can also make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
@@ -24,11 +28,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        copyfiledialog.cpp \
+        mainwindow.cpp \
+        pmconfigdialog.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    copyfiledialog.h \
+    pmconfigdialog.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    copyfiledialog.ui \
+    pmconfigdialog.ui
 
 
 RC_FILE = programmanager.rc

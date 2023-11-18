@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Artur Kozioł                               *
+ *   Copyright (C) 2006-2024 by Artur Kozioł                               *
  *   artkoz78@gmail.com                                                    *
  *                                                                         *
  *   This file is part of EdytorNC.                                        *
@@ -59,6 +59,9 @@ FtpConfigDialog::FtpConfigDialog(QWidget *parent, Qt::WindowFlags f) : QDialog(p
 
    connect(configNameBox, SIGNAL(currentIndexChanged(int)), SLOT(changeSettings()));
 
+   connect(lineEditRootPath, SIGNAL(textChanged(QString)), SLOT(refreshRelativePath()));
+   connect(relativePathComboBox, SIGNAL(currentIndexChanged(int)), SLOT(refreshSavePath()));
+
 
    tabWidget->setCurrentIndex(1);
 
@@ -110,7 +113,7 @@ void FtpConfigDialog::saveButtonClicked()
     QStringList list;
     QString item, curItem;
 
-    QSettings settings("EdytorNC", "EdytorNC");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
 
     settings.beginGroup("FTPConfigs");
 
@@ -159,7 +162,7 @@ void FtpConfigDialog::saveButtonClicked()
     settings.setValue("CreateBackup", renameCheckBox->isChecked());
     settings.setValue("RemoveLetters", removeLettersCheckBox->isChecked());
 
-    int state;
+    int state = 0;
     if(leaveAsIsCheckBox->isChecked())
         state = 0;
     if(detectFormFileNameCheckBox->isChecked())
@@ -195,6 +198,7 @@ void FtpConfigDialog::saveButtonClicked()
     };
     eList.removeDuplicates();
     eList.sort();
+    eList.append("");
     settings.setValue("FileNameMask", eList);
 
     eList.clear();
@@ -208,6 +212,7 @@ void FtpConfigDialog::saveButtonClicked()
     };
     eList.removeDuplicates();
     eList.sort();
+    eList.append("");
     settings.setValue("UploadFileNameMask", eList);
 
     eList.clear();
@@ -242,10 +247,11 @@ void FtpConfigDialog::saveButtonClicked()
 
 void FtpConfigDialog::changeSettings()
 {
+    QString defaultPort, tx;
+    QDir dir;
 
     // UNIX-derived systems such as Linux and Android don't allow access to
     // port 21 for non-root programs, so we will use port 2121 instead.
-    QString defaultPort;
 #if defined(Q_OS_UNIX)
     defaultPort = "2121";
 #else
@@ -256,7 +262,7 @@ void FtpConfigDialog::changeSettings()
     int id;
     QStringList list;
 
-    QSettings settings("EdytorNC", "EdytorNC");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
 
     QStringList extensions = settings.value("Extensions", (QStringList() << "*.nc" << "*.cnc")).toStringList();
 
@@ -304,13 +310,13 @@ void FtpConfigDialog::changeSettings()
     fileNameExpASComboBox->insertItems(0, list);
 
 
-    QDir dir;
-    dir.setPath(lineEditRootPath->text());
-    relativePathComboBox->clear();
-    for(const QFileInfo & finfo: dir.entryInfoList(QDir::AllDirs | QDir::Writable | QDir::Readable | QDir::NoDotAndDotDot | QDir::NoSymLinks, QDir::Name | QDir::IgnoreCase))
-    {
-        relativePathComboBox->addItem(dir.relativeFilePath(finfo.absoluteFilePath()));
-    };
+
+//    dir.setPath(lineEditRootPath->text());
+
+//    for(const QFileInfo & finfo: dir.entryInfoList(QDir::AllDirs | QDir::Writable | QDir::Readable | QDir::NoDotAndDotDot | QDir::NoSymLinks, QDir::Name | QDir::IgnoreCase))
+//    {
+//        relativePathComboBox->addItem(dir.relativeFilePath(finfo.absoluteFilePath()));
+//    };
 
     configName = configNameBox->currentText();
     settings.beginGroup(configName);
@@ -369,20 +375,32 @@ void FtpConfigDialog::changeSettings()
        fileNameExpASComboBox->setCurrentIndex(id);
 
 
-    id = relativePathComboBox->findText(settings.value("RelativePath", "").toString());
-    if(id >= 0)
-       relativePathComboBox->setCurrentIndex(id);
+//    id = relativePathComboBox->findText(settings.value("RelativePath", "").toString());
+//    if(id >= 0)
+//       relativePathComboBox->setCurrentIndex(id);
 
-    dir.setPath(lineEditRootPath->text() + "/" + relativePathComboBox->currentText());
+    relativePathComboBox->clear();
+    tx = settings.value("RelativePath", "").toString();
+    relativePathComboBox->addItem(tx);
+    relativePathComboBox->setCurrentIndex(relativePathComboBox->findText(tx));
+    refreshRelativePath();
+
+
+//    dir.setPath(lineEditRootPath->text() + "/" + relativePathComboBox->currentText());
     saveDirComboBox->clear();
-    for(const QFileInfo & finfo: dir.entryInfoList(QDir::AllDirs | QDir::Writable | QDir::Readable | QDir::NoDotAndDotDot | QDir::NoSymLinks, QDir::Name | QDir::IgnoreCase))
-    {
-        saveDirComboBox->addItem(dir.relativeFilePath(finfo.absoluteFilePath()));
-    };
-    saveDirComboBox->addItem("");
-    id = saveDirComboBox->findText(settings.value("SaveDir", "").toString());
-    if(id >= 0)
-        saveDirComboBox->setCurrentIndex(id);
+//    for(const QFileInfo & finfo: dir.entryInfoList(QDir::AllDirs | QDir::Writable | QDir::Readable | QDir::NoDotAndDotDot | QDir::NoSymLinks, QDir::Name | QDir::IgnoreCase))
+//    {
+//        saveDirComboBox->addItem(dir.relativeFilePath(finfo.absoluteFilePath()));
+//    };
+//    saveDirComboBox->addItem("");
+//    id = saveDirComboBox->findText(settings.value("SaveDir", "").toString());
+//    if(id >= 0)
+//        saveDirComboBox->setCurrentIndex(id);
+
+    tx = settings.value("SaveDir", "").toString();
+    saveDirComboBox->addItem(tx);
+    saveDirComboBox->setCurrentIndex(saveDirComboBox->findText(tx));
+    refreshSavePath();
 
 
     settings.endGroup();
@@ -398,7 +416,7 @@ void FtpConfigDialog::loadSettings()
     int id;
     QStringList list;
 
-    QSettings settings("EdytorNC", "EdytorNC");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
 
     settings.beginGroup("FTPConfigs");
 
@@ -432,10 +450,10 @@ void FtpConfigDialog::portNameComboBoxIndexChanged(QString name)
 
 void FtpConfigDialog::deleteButtonClicked()
 {
-    if(configNameBox->currentText() == tr("Default"))
-        return;
+//    if(configNameBox->currentText() == tr("Default"))
+//        return;
 
-    QSettings settings("EdytorNC", "EdytorNC");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
 
     settings.beginGroup("FTPConfigs");
     settings.remove(configNameBox->currentText());
@@ -451,9 +469,9 @@ void FtpConfigDialog::deleteButtonClicked()
 
 void FtpConfigDialog::closeButtonClicked()
 {
-   QSettings settings("EdytorNC", "EdytorNC");
+   QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
    settings.beginGroup("FTPConfigs");
-   settings.setValue("CurrentSerialPortSettings", configNameBox->currentText());
+   settings.setValue("CurrentFtpServerSettings", configNameBox->currentText());
    settings.endGroup();
 
    close();
@@ -789,5 +807,85 @@ void FtpConfigDialog::readPath3Changed(const QString text)
 //      searchPath3LineEdit->setPalette(QPalette());
 //    else
 //      searchPath3LineEdit->setPalette(palette);
+}
+
+//**************************************************************************************************
+//
+//**************************************************************************************************
+
+void FtpConfigDialog::refreshRelativePath()
+{
+
+    QStringList list;
+    QString tx;
+    QDir dir;
+ //   QPalette palette;
+
+
+    relativePathComboBox->blockSignals(true);
+    relativePathComboBox->setDuplicatesEnabled(false);
+
+    dir.setPath(lineEditRootPath->text());
+
+    tx = relativePathComboBox->currentText();
+    relativePathComboBox->clear();
+
+    for(const QFileInfo & finfo: dir.entryInfoList(QDir::AllDirs | QDir::Writable | QDir::Readable | QDir::NoDotAndDotDot | QDir::NoSymLinks, QDir::Name | QDir::IgnoreCase))
+    {
+        relativePathComboBox->addItem(dir.relativeFilePath(finfo.absoluteFilePath()));
+    };
+
+    relativePathComboBox->addItem(tx);
+    relativePathComboBox->setCurrentIndex(relativePathComboBox->findText(tx));
+
+    relativePathComboBox->blockSignals(false);
+
+}
+
+//**************************************************************************************************
+//
+//**************************************************************************************************
+
+void FtpConfigDialog::refreshSavePath()
+{
+    QStringList list;
+    QString tx;
+    QDir dir;
+ //   QPalette palette;
+
+
+    saveDirComboBox->blockSignals(true);
+    saveDirComboBox->setDuplicatesEnabled(false);
+
+
+    dir.setPath(lineEditRootPath->text() + "/" + relativePathComboBox->currentText());
+
+    tx = saveDirComboBox->currentText();
+    saveDirComboBox->clear();
+
+    for(const QFileInfo & finfo: dir.entryInfoList(QDir::AllDirs | QDir::Writable | QDir::Readable | QDir::NoDotAndDotDot | QDir::NoSymLinks, QDir::Name | QDir::IgnoreCase))
+    {
+        saveDirComboBox->addItem(dir.relativeFilePath(finfo.absoluteFilePath()));
+    };
+
+    saveDirComboBox->addItem(tx);
+    saveDirComboBox->setCurrentIndex(saveDirComboBox->findText(tx));
+
+    saveDirComboBox->blockSignals(false);
+
+
+
+//    dir.setPath(rootPathLineEdit->text() + "/" + relativePathComboBox->currentText()+ "/" + saveDirComboBox->currentText());
+
+//    saveDirComboBox->setAutoFillBackground(true);
+//    palette = saveDirComboBox->palette();
+//    //palette.setColor(QPalette( Qt::blue ));
+
+//    if(dir.exists())
+//        saveDirComboBox->setPalette(QPalette());
+//    else
+//        saveDirComboBox->setPalette(QPalette( Qt::blue ));
+
+//    qDebug() << "Exist: " << dir.exists();
 }
 

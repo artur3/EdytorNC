@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Artur Kozioł                               *
+ *   Copyright (C) 2006-2024 by Artur Kozioł                               *
  *   artkoz78@gmail.com                                                    *
  *                                                                         *
  *   This file is part of EdytorNC.                                        *
@@ -45,7 +45,7 @@ FileChecker::FileChecker(QWidget *parent) : QDialog(parent), ui(new Ui::FileChec
 
     createDiff();
 
-    QSettings settings("EdytorNC", "EdytorNC");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
     settings.beginGroup("FileCheck");
     splitterState = settings.value("VSplitterState", QByteArray()).toByteArray();
     ui->vSplitter->restoreState(splitterState);
@@ -60,7 +60,7 @@ FileChecker::FileChecker(QWidget *parent) : QDialog(parent), ui(new Ui::FileChec
 
 FileChecker::~FileChecker()
 {
-    QSettings settings("EdytorNC", "EdytorNC");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
     settings.beginGroup("FileCheck");
     settings.setValue("VSplitterState", ui->vSplitter->saveState());
     settings.endGroup();
@@ -202,6 +202,8 @@ void FileChecker::findFiles(const QString startDir, QStringList fileFilter)
             file.close();
 
             comment_tx = "";
+            QTableWidgetItem *statusItem = new QTableWidgetItem();
+            QColor bColor = statusItem->backgroundColor();
 
             if(QFile::exists(QDir::toNativeSeparators(path2 + files[i])))
             {
@@ -213,23 +215,32 @@ void FileChecker::findFiles(const QString startDir, QStringList fileFilter)
 //                    qDebug() << "++++++++++++ Diff resutl: " << result << path2 + files[i] <<  directory.absoluteFilePath(files[i]);
 
                     if(result)
+                    {
                         comment_tx = tr("Equal");
+                        bColor = QColor(230, 242, 255);
+                    }
                     else
+                    {
                         comment_tx = tr("Changed");
+                        bColor = QColor(255, 230, 128);
+                    };
 
                 };
             }
             else
             {
                 comment_tx = tr("New");
+                bColor = QColor(153, 255, 153);
             };
 
-            QTableWidgetItem *statusItem = new QTableWidgetItem(comment_tx);
+            statusItem->setText(comment_tx);
             statusItem->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
             statusItem->setToolTip(tr("Status of received file:\n"
                                       "New - file does not exists in Search path.\n"
                                       "Equal - received file and file in Search path are identical.\n"
                                       "Changed - received file is modified"));
+
+            statusItem->setBackground(bColor);
             ui->fileTableWidget->setItem(row, 4, statusItem);
 
 

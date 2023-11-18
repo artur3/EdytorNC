@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Artur Kozioł                               *
+ *   Copyright (C) 2006-2024 by Artur Kozioł                               *
  *   artkoz78@gmail.com                                                    *
  *                                                                         *
  *   This file is part of EdytorNC.                                        *
@@ -34,7 +34,7 @@ sessionDialog::sessionDialog(QWidget *parent, Qt::WindowFlags f) : QDialog(paren
     //clonePushButton->setVisible(false);
     //restoreCheckBox->setVisible(false);
 
-    QSettings settings("EdytorNC", "EdytorNC");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
     settings.beginGroup("Sessions");
 
     restoreCheckBox->setChecked(settings.value("RestoreLastSession", false).toBool());
@@ -56,7 +56,7 @@ sessionDialog::sessionDialog(QWidget *parent, Qt::WindowFlags f) : QDialog(paren
 
 sessionDialog::~sessionDialog()
 {
-    QSettings settings("EdytorNC", "EdytorNC");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
     settings.beginGroup("Sessions");
 
     settings.setValue("RestoreLastSession", restoreCheckBox->isChecked());
@@ -259,7 +259,7 @@ void sessionDialog::copySession(QString oldName, QString newName, bool deleteOld
     bool maximized;
 
 
-    QSettings settings("EdytorNC", "EdytorNC");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
     settings.beginGroup("Sessions");
 
     int max = settings.beginReadArray(oldName);
@@ -303,7 +303,7 @@ void sessionDialog::copySession(QString oldName, QString newName, bool deleteOld
 
 void sessionDialog::deleteSession(QString name)
 {
-    QSettings settings("EdytorNC", "EdytorNC");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
     settings.beginGroup("Sessions");
     settings.remove(name);
     settings.endGroup();

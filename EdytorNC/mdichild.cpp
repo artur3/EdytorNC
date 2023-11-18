@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Artur Kozioł                               *
+ *   Copyright (C) 2006-2024 by Artur Kozioł                               *
  *   artkoz78@gmail.com                                                    *
  *                                                                         *
  *   This file is part of EdytorNC.                                        *
@@ -658,7 +658,16 @@ bool MdiChild::eventFilter(QObject *obj, QEvent *ev)
                 break;
             };
         };
+
+        key = cursor.selectedText();
+        if(!key.isEmpty())
+            if((key.at(0) == '(') || (key.at(0) == ';'))
+            {
+                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+            };
+
         posStart = cursor.position();
+
 
         if(!cursor.atEnd() && !cursor.atBlockEnd())
         {
@@ -2593,7 +2602,7 @@ void MdiChild::highlightFindText(QString searchString, QTextDocument::FindFlags 
    tmpSelections.clear();
    findTextExtraSelections.clear();
    tmpSelections.append(extraSelections);
-   QColor lineColor = QColor(Qt::yellow).lighter(155);
+   QColor lineColor = QColor(Qt::yellow).lighter(135);
    selection.format.setBackground(lineColor);
 
    QTextDocument *doc = textEdit->document();
@@ -3282,7 +3291,7 @@ QStringList MdiChild::splitFile()
 
       }while(index > 0);
    };
-   qSort(progBegins.begin(), progBegins.end());
+   std::sort(progBegins.begin(), progBegins.end());
 
    QList<int>::const_iterator it = progBegins.constBegin();
    while(it != progBegins.constEnd())

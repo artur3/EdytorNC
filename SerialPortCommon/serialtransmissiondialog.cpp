@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Artur Kozioł                               *
+ *   Copyright (C) 2006-2024 by Artur Kozioł                               *
  *   artkoz78@gmail.com                                                    *
  *                                                                         *
  *   This file is part of EdytorNC.                                        *
@@ -860,7 +860,7 @@ void SerialTransmissionDialog::loadConfig(QString configName)
     portSettings.configName = configName;
     setObjectName(portSettings.configName);
     stop = true;
-    QSettings settings("EdytorNC", "EdytorNC");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "EdytorNC", "EdytorNC");
     settings.beginGroup("SerialPortConfigs");
 
 #ifdef Q_OS_WIN
@@ -1621,7 +1621,7 @@ QStringList SerialTransmissionDialog::splitFile(QString *text)
 //        }while(index > 0);
 //    };
 
-    qSort(progBegins.begin(), progBegins.end());
+    std::sort(progBegins.begin(), progBegins.end());
 
 
     // split file  TODO: data can be lost if filename detection fails also some garbage are left
@@ -1656,26 +1656,26 @@ void SerialTransmissionDialog::startFileServer(QString configName)
     if(configName.isEmpty())
         return;
 
-        loadConfig(configName);
+    loadConfig(configName);
 
-        if(!portSettings.fileServer)
-        {
-            QMessageBox::information(this, tr("Serial transmission - File server"),
+    if(!portSettings.fileServer)
+    {
+        QMessageBox::information(this, tr("Serial transmission - File server"),
                                  tr("Can't start.\n"
                                     "File server option is not enabled in serial port settings"));
-            return;
-        };
+        return;
+    };
 
 
-        resetTransmission(true);
+    resetTransmission(true);
 
-        if(serialPort.isOpen())
-            if(portSettings.sendXon && (!sending))
-                serialPort.write(&portSettings.Xon, 1);
+    if(serialPort.isOpen())
+        if(portSettings.sendXon && (!sending))
+            serialPort.write(&portSettings.Xon, 1);
 
-        setWindowTitle(tr("%1").arg(configName)); //"Serial transmission - File server -> %1"
-        setRange(0, 0);
-        setLabelText(tr("Waiting for data..."));
+    setWindowTitle(tr("%1").arg(configName)); //"Serial transmission - File server -> %1"
+    setRange(0, 0);
+    setLabelText(tr("Waiting for data..."));
 }
 
 //**************************************************************************************************

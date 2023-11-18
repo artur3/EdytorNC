@@ -21,26 +21,48 @@
  ***************************************************************************/
 
 
-#ifndef SERIALPORTCFGHELPDIALOG_H
-#define SERIALPORTCFGHELPDIALOG_H
+#ifndef COPYFILEDIALOG_H
+#define COPYFILEDIALOG_H
 
 #include <QDialog>
+#include <QSqlDatabase>
 
-namespace Ui
-{
-    class SerialPortCfgHelpDialog;
+
+namespace Ui {
+class copyFileDialog;
 }
 
-class SerialPortCfgHelpDialog : public QDialog
+class copyFileDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit SerialPortCfgHelpDialog(QWidget *parent = 0);
-    ~SerialPortCfgHelpDialog();
+    explicit copyFileDialog(QWidget *parent = nullptr);
+    ~copyFileDialog();
 
+    void setSource(QString mch, QString fileList);
+    void setDatabase(QSqlDatabase *database = 0);
+
+private slots:
+      void findLastFileNumber();
+
+      void dstLineEditChanged();
+      void copyFiles();
 private:
-    Ui::SerialPortCfgHelpDialog *ui;
+    Ui::copyFileDialog *ui;
+
+
+
+    QStringList sourceFiles;
+    QSqlDatabase *db;
+
+    void readMachinesFromDb();
+    QString readDstPathFromDb();
+    int isFileNameNumeric(QString fileName, int &numStart, int &numLen);
+
+    void loadConfignames();
+
+    QString readSrcPathFromDb();
 };
 
-#endif // SERIALPORTCFGHELPDIALOG_H
+#endif // COPYFILEDIALOG_H

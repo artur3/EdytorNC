@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006-2024 by Artur Kozioł                               *
+ *   Copyright (C) 2006-2024 by Artur KozioĹ‚                               *
  *   artkoz78@gmail.com                                                    *
  *                                                                         *
  *   This file is part of EdytorNC.                                        *
@@ -21,79 +21,66 @@
  ***************************************************************************/
 
 
-#ifndef SERIALPORTCONFIGDIALOG_H
-#define SERIALPORTCONFIGDIALOG_H
+#ifndef PMCONFIGDIALOG_H
+#define PMCONFIGDIALOG_H
 
 
 #include <QtWidgets>
-#include <QtSerialPort/QSerialPortInfo>
-#include <QtSerialPort/QSerialPort>
 
-#include "../SerialPortCommon/ui_serialportconfigdialog.h"
+#include "ui_pmconfigdialog.h"
 
+#include <QSqlError>
+#include <QSqlQuery>
 
-struct SerialPortSettings
-{
-    QSerialPort::BaudRate BaudRate;
-    QSerialPort::DataBits DataBits;
-    QSerialPort::Parity Parity;
-    QSerialPort::StopBits StopBits;
-    QSerialPort::FlowControl FlowControl;
-    QString configName;
-    QString portName;
-    QString sendAtEnd;
-    QString sendAtBegining;
-    QString savePath;
-    QString saveExt;
-    QString endOfProgChar;
-    QString callerProgName;
-    double lineDelay;
-    unsigned int sendStartDelayReloadValue;
-    unsigned int autoCloseTimeout;
-    unsigned int sendTimeout;
-    unsigned int receiveTimeout;
-    unsigned int reconnectTime;
-    char Xon;
-    char Xoff;
-    bool createLogFile;
-    bool autoSave;
-    bool deleteControlChars;
-    bool removeEmptyLines;
-    bool removeBefore;
-    bool removeSpaceEOB;
-    bool renameIfExists;
-    bool removeLetters;
-    bool guessFileNameByProgName;
-    bool appendExt;
-    bool useAsExt;
-    bool splitPrograms;
-    bool fileNameLowerCase;
-    bool fileServer;
-    bool logData;
-    bool waitForCts;
-    bool waitForXon;
-    bool sendXon;
-    QString searchPath1;
-    QString searchExt1;
-    QString searchPath2;
-    QString searchExt2;
-    QString searchPath3;
-    QString searchExt3;
-    QString fileNameExpFs;
-    QString fileNameExpAs;
-    QString eobChar;
-    QString fileNameExpSaveFile;
-    QString fileNameMask;
-    QString removeFromRecieved;
-};
+//struct FtpSettings
+//{
+//    QString configName;
+//    QString rootPath;
+//    QString relativePath;
 
-class SerialPortConfigDialog : public QDialog, private Ui::SerialPortConfigDialog
+//    bool removeLetters;
+
+//    bool fileNameLowerCase;
+
+//    int fileNameProcessing;
+//    bool appendExt;
+//    bool useAsExt;
+//    bool splitPrograms;
+
+//    QString saveExt;
+
+//    QString saveDir;
+
+//    bool createLogFile;
+//    bool listDirs;
+//    bool renameIfExists;
+
+//    bool logData;
+
+//    QString listExt;
+
+//    QString searchExt;
+
+////    QString searchPath2;
+////    QString searchExt2;
+////    QString searchPath3;
+////    QString searchExt3;
+//    QString fileNameExpFs;
+//    QString fileNameExpAs;
+////    QString eobChar;
+//    QString fileNameExpSaveFile;
+//    QString fileNameMask;
+//    QString uploadFileNameMask;
+////    QString removeFromRecieved;
+//};
+
+class PmConfigDialog : public QDialog, private Ui::PmConfigDialog
 {
    Q_OBJECT
 
    public:
-     SerialPortConfigDialog(QWidget *parent = 0, QString confName = "", Qt::WindowFlags f = Qt::Dialog);
-     ~SerialPortConfigDialog();
+     PmConfigDialog(QWidget *parent = 0, QSqlDatabase *database = 0, Qt::WindowFlags f = Qt::Dialog);
+     ~PmConfigDialog();
 
    public slots:
 
@@ -113,19 +100,21 @@ class SerialPortConfigDialog : public QDialog, private Ui::SerialPortConfigDialo
      void deleteButtonClicked();
      void saveCloseButtonClicked();
      void flowCtlGroupReleased();
-     void browse1ButtonClicked();
+     void toolButtonBrowseClicked();
      void browse2ButtonClicked();
-     void browse3ButtonClicked();
+     void refreshRelativePath();
+     void refreshSavePath();
      void browse4ButtonClicked();
      void portNameComboBoxIndexChanged(QString name);
-     void autoSaveCheckBoxChanged(int state);
+//     void autoSaveCheckBoxChanged(int state);
      void appendExtCheckBoxChanged(int state);
      void useAsExtCheckBoxChanged(int state);
      void fileServerCheckBoxChanged(int state);
-     void addButtonClicked();
-     void removeButtonClicked();
-     void addMaskButtonClicked();
-     void removeMaskButtonClicked();
+     void sqliteCheckBoxChanged(int state);
+     void saveConfigToDb();
+     void readMachinePathFromDb();
+     void readMachinesFromDb();
+     void deleteMachineFromDb();
      void addEobButtonClicked();
      void deleteEobButtonClicked();
      void addEobCharButtonClicked();
@@ -138,17 +127,17 @@ class SerialPortConfigDialog : public QDialog, private Ui::SerialPortConfigDialo
      void readPath2Changed(const QString text);
      void readPath3Changed(const QString text);
 
+
+
 private:
      QString browseForDir(const QString dir, QString windowTitle);
 
-     QButtonGroup *baudGroup;
-     QButtonGroup *dataBitsGroup;
-     QButtonGroup *stopBitsGroup;
-     QButtonGroup *parityGroup;
-     QButtonGroup *flowCtlGroup;
      QString configName;
+
+     QSqlDatabase *db;
+
 
 };
 
 
-#endif // SERIALPORTCONFIGDIALOG_H
+#endif

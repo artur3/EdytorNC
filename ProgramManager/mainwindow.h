@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Artur Kozioł                               *
+ *   Copyright (C) 2006-2024 by Artur Kozioł                               *
  *   artkoz78@gmail.com                                                    *
  *                                                                         *
  *   This file is part of EdytorNC.                                        *
@@ -29,6 +29,8 @@
 #include <QSettings>
 #include <QFileDialog>
 #include <QMainWindow>
+#include <QSqlTableModel>
+#include <QTableView>
 
 #include "../FileChecker/filechecker.h"
 
@@ -47,6 +49,11 @@ public:
 public slots:
     void messReceived(const QString &text = "");
 
+protected:
+        bool eventFilter(QObject *object, QEvent *event);
+        void closeEvent(QCloseEvent *event);
+
+
 private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
     void createTrayIcon();
@@ -55,12 +62,23 @@ private slots:
     void quitApp();
 
     void findFiles();
+    void applyFilter();
 
     void showNewFiles();
     void browseSaveFolder();
-    void tableCellDoubleClicked(int row, int col);
+    void tableCellDoubleClicked(const QModelIndex &index);
+    void tableViewItemClicked(QModelIndex index);
 
+    void changeTable();
+    void listViewItemClicked(QModelIndex index);
 
+    void configPushButton_clicked();
+    void copyFiles();
+    void rescanFiles(QString machine = "", bool deleteOldRecords = true);
+
+    void fileChangedSlot(const QString &path);
+    void showNewFilesActHovered();
+    void refreshTimerTimout();
 signals:
     void needToShow();
 
@@ -84,20 +102,60 @@ private:
     QAction *configPortAct;
     QAction *browseSaveFolderAct;
     QAction *showNewFilesAct;
-    QComboBox *configBox;
+    QAction *copyFilesAct;
+    QAction *scanAllFilesAct;
+    //QComboBox *configBox;
     QToolBar *fileToolBar;
+    QToolBar *windowToolBar;
 
     QProcess *edytorProc;
 
     QStringList extensions;
     QString mainPath;
-    QString downloadPath;
+    QString savePath;
 
+    QSqlDatabase db;
+    QSqlTableModel *tableViewModel;
+
+    QString currentMachineName;
+
+    QPointer<QFileSystemWatcher> fileWatcher;
+    QStringListModel *listViewModel;
+
+
+    bool closable;
+
+    QTimer *refreshTimer;
+    QTime refreshTime1;
+    QTime refreshTime2;
+
+
+    void updateFileTable(const QString machine, const QString startDir, QStringList fileFilter);
     void findFiles(const QString startDir, QStringList fileFilter);
-    void loadSerialConfignames();
-    void getPathFromConfig();
+    void loadConfignames();
+    void getDataFromConfig();
     void openInEditor(QString files);
+    bool createConnection();
+    QString fileNamesFromIndex(const QModelIndex &index);
+    QString getMachineMainPathFromConfig(const QString machineName);
 
+    void on_lineFind_textEdited(const QString &arg1);
+
+
+
+
+
+    QStringList getMachineListFromConfig();
+    QStringList getFileExtensionsFromConfig(const QString machineName);
+    QString getMachineSavePathFromConfig(const QString machineName);
+    void initDatabase();
+    QString getMachineMainPathFromDb(const QString machineName);
+    QString getMachineSavePathFromDb(const QString machineName);
+    QStringList getMachineFileExtFromDb(const QString machineName);
+    QStringList getMachineListFromDb();
+    bool tryOpenDb(bool silent = false);
+    void updateFileInDb(QString machine, QString fileName);
+    QString getMachineNameFromPath(const QString &path);
 };
 
 #endif // MAINWINDOW_H

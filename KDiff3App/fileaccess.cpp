@@ -135,7 +135,7 @@ void FileAccess::setFile( const QString& name, bool bWantToWrite )
          m_bWritable    = fi.isWritable();
          m_bExecutable  = fi.isExecutable();
 #endif
-         m_creationTime = fi.created();
+         m_creationTime = fi.birthTime();
          m_bHidden    = fi.isHidden();
          m_modificationTime = fi.lastModified();
          m_accessTime = fi.lastRead();
@@ -175,7 +175,7 @@ void FileAccess::setFile( const QString& name, bool bWantToWrite )
             m_bWritable    = fi.isWritable();
             m_bExecutable  = fi.isExecutable();
 #endif
-            m_creationTime = fi.created();
+            m_creationTime = fi.birthTime();
             m_bHidden    = fi.isHidden();
             m_modificationTime = fi.lastModified();
             m_accessTime = fi.lastRead();
