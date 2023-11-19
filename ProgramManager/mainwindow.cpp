@@ -96,6 +96,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(refreshTimer, SIGNAL(timeout()), SLOT(refreshTimerTimout()));
     refreshTimer->start(1000);
 
+    showMaximized();
 
 }
 

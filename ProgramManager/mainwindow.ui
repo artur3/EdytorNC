@@ -139,13 +139,13 @@
              </sizepolicy>
             </property>
             <property name="verticalScrollBarPolicy">
-             <enum>Qt::ScrollBarAlwaysOn</enum>
+             <enum>Qt::ScrollBarAsNeeded</enum>
             </property>
             <property name="horizontalScrollBarPolicy">
              <enum>Qt::ScrollBarAsNeeded</enum>
             </property>
             <property name="sizeAdjustPolicy">
-             <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
+             <enum>QAbstractScrollArea::AdjustToContents</enum>
             </property>
             <property name="editTriggers">
              <set>QAbstractItemView::EditKeyPressed</set>

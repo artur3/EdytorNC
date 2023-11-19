@@ -2,191 +2,214 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="pl_PL">
 <context>
-    <name>FtpConfigDialog</name>
+    <name>FTPserverWindow</name>
     <message>
-        <location filename="ftpconfigdialog.cpp" line="36"/>
-        <source>FTP server configuration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="ftpconfigdialog.cpp" line="407"/>
-        <location filename="ftpconfigdialog.cpp" line="410"/>
-        <location filename="ftpconfigdialog.cpp" line="434"/>
-        <source>Default</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>FtpControlConnection</name>
-    <message>
-        <location filename="ftpcontrolconnection.cpp" line="683"/>
-        <source>Default</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>MainWindow</name>
-    <message>
-        <location filename="ftp_server_mainwindow.ui" line="14"/>
+        <location filename="ftpserverwindow.ui" line="14"/>
         <source>FTP Server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ftp_server_mainwindow.ui" line="25"/>
+        <location filename="ftpserverwindow.ui" line="21"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ftp_server_mainwindow.ui" line="57"/>
+        <location filename="ftpserverwindow.ui" line="53"/>
         <source>&amp;File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ftp_server_mainwindow.ui" line="62"/>
+        <location filename="ftpserverwindow.ui" line="58"/>
         <source>&amp;Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ftp_server_mainwindow.ui" line="70"/>
+        <location filename="ftpserverwindow.ui" line="66"/>
         <source>toolBar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ftp_server_mainwindow.cpp" line="205"/>
+        <location filename="ftpserverwindow.cpp" line="205"/>
         <source>Listening at: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ftp_server_mainwindow.cpp" line="210"/>
+        <location filename="ftpserverwindow.cpp" line="210"/>
         <source>Not listening.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ftp_server_mainwindow.cpp" line="248"/>
+        <location filename="ftpserverwindow.cpp" line="248"/>
         <source>Connected to: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ftp_server_mainwindow.cpp" line="298"/>
+        <location filename="ftpserverwindow.cpp" line="313"/>
         <source>&amp;Minimize to tray</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ftp_server_mainwindow.cpp" line="299"/>
+        <location filename="ftpserverwindow.cpp" line="314"/>
         <source>Minimize to system tray</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ftp_server_mainwindow.cpp" line="302"/>
+        <location filename="ftpserverwindow.cpp" line="317"/>
         <source>&amp;About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ftp_server_mainwindow.cpp" line="303"/>
+        <location filename="ftpserverwindow.cpp" line="318"/>
         <source>Show the application&apos;s About box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ftp_server_mainwindow.cpp" line="306"/>
+        <location filename="ftpserverwindow.cpp" line="321"/>
+        <source>About &amp;Qt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ftpserverwindow.cpp" line="322"/>
+        <source>Show the Qt library&apos;s About box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ftpserverwindow.cpp" line="325"/>
         <source>Mi&amp;nimize</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ftp_server_mainwindow.cpp" line="309"/>
+        <location filename="ftpserverwindow.cpp" line="328"/>
         <source>Ma&amp;ximize</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ftp_server_mainwindow.cpp" line="312"/>
+        <location filename="ftpserverwindow.cpp" line="331"/>
         <source>&amp;Restore</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ftp_server_mainwindow.cpp" line="315"/>
+        <location filename="ftpserverwindow.cpp" line="334"/>
         <source>&amp;Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ftp_server_mainwindow.cpp" line="318"/>
+        <location filename="ftpserverwindow.cpp" line="337"/>
         <source>&amp;Reset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ftp_server_mainwindow.cpp" line="319"/>
+        <location filename="ftpserverwindow.cpp" line="338"/>
         <source>Restart server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ftp_server_mainwindow.cpp" line="322"/>
-        <location filename="ftp_server_mainwindow.cpp" line="324"/>
+        <location filename="ftpserverwindow.cpp" line="341"/>
+        <location filename="ftpserverwindow.cpp" line="342"/>
         <source>Serial port configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ftp_server_mainwindow.cpp" line="329"/>
+        <location filename="ftpserverwindow.cpp" line="346"/>
+        <source>&amp;Browse save folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ftpserverwindow.cpp" line="347"/>
+        <source>Browse save folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ftpserverwindow.cpp" line="350"/>
+        <source>&amp;Show saved files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ftpserverwindow.cpp" line="351"/>
+        <source>Show saved files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ftpserverwindow.cpp" line="358"/>
         <source>Start minimized</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ftp_server_mainwindow.cpp" line="418"/>
+        <location filename="ftpserverwindow.cpp" line="428"/>
+        <source>FTP server for CNC machines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ftpserverwindow.cpp" line="478"/>
         <source>About EdytorNC - FTP file server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ftp_server_mainwindow.cpp" line="419"/>
+        <location filename="ftpserverwindow.cpp" line="479"/>
         <source>The &lt;b&gt;EdytorNC&lt;/b&gt; is text editor for CNC programmers.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ftp_server_mainwindow.cpp" line="420"/>
-        <source>&lt;P&gt;Version: same as EdytorNC</source>
+        <location filename="ftpserverwindow.cpp" line="481"/>
+        <source>&lt;P&gt;Version: %1.%2.%3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ftp_server_mainwindow.cpp" line="421"/>
-        <source>&lt;P&gt;Copyright (C) 1998 - 2022 by &lt;a href=&quot;mailto:artkoz78@gmail.com&quot;&gt;Artur Kozioł&lt;/a&gt;</source>
+        <location filename="ftpserverwindow.cpp" line="482"/>
+        <source>&lt;P&gt;Copyright (C) 1998 - 2024 by &lt;a href=&quot;mailto:artkoz78@gmail.com&quot;&gt;Artur Kozioł&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ftp_server_mainwindow.cpp" line="422"/>
+        <location filename="ftpserverwindow.cpp" line="483"/>
         <source>&lt;P&gt;QFtpServer Copyright (c) 2020 by &lt;a href=&quot;https://github.com/sashoalm/QFtpServer&quot;&gt;Alexander Almaleh&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ftp_server_mainwindow.cpp" line="423"/>
-        <location filename="ftp_server_mainwindow.cpp" line="425"/>
-        <location filename="ftp_server_mainwindow.cpp" line="427"/>
+        <location filename="ftpserverwindow.cpp" line="484"/>
+        <location filename="ftpserverwindow.cpp" line="486"/>
+        <location filename="ftpserverwindow.cpp" line="488"/>
         <source>&lt;P&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ftp_server_mainwindow.cpp" line="426"/>
+        <location filename="ftpserverwindow.cpp" line="487"/>
         <source>&lt;P&gt;EdytorNC contains pieces of code from other Open Source projects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ftp_server_mainwindow.cpp" line="428"/>
+        <location filename="ftpserverwindow.cpp" line="489"/>
         <source>&lt;P&gt;&lt;i&gt;EdytorNC - FTP file server is free software; you can redistribute it and/or modifyit under the terms of the GNU General Public License  as published bythe Free Software Foundation; either version 2 of the License, or(at your option) any later version.&lt;/i&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ftp_server_mainwindow.cpp" line="432"/>
+        <location filename="ftpserverwindow.cpp" line="493"/>
         <source>&lt;P&gt;&lt;i&gt;The program is provided AS IS with NO WARRANTY OF ANY KIND,INCLUDING THE WARRANTY OF DESIGN,MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.&lt;/i&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ftp_server_mainwindow.cpp" line="464"/>
+        <location filename="ftpserverwindow.cpp" line="531"/>
         <source>EdytorNC - FTP file server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ftp_server_mainwindow.cpp" line="465"/>
+        <location filename="ftpserverwindow.cpp" line="532"/>
         <source>The program will keep running in the system tray. To terminate the program, choose &lt;b&gt;Quit&lt;/b&gt; in the context menu of the system tray entry.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ftpserverwindow.cpp" line="590"/>
+        <source>Paths not configured</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ftpserverwindow.cpp" line="625"/>
+        <location filename="ftpserverwindow.cpp" line="628"/>
+        <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>SerialPortConfigDialog</name>
+    <name>FtpConfigDialog</name>
     <message>
         <location filename="ftpconfigdialog.ui" line="20"/>
         <source>Dialog</source>
@@ -220,6 +243,8 @@
     </message>
     <message>
         <location filename="ftpconfigdialog.ui" line="115"/>
+        <location filename="ftpconfigdialog.cpp" line="426"/>
+        <location filename="ftpconfigdialog.cpp" line="429"/>
         <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
@@ -235,7 +260,7 @@
     </message>
     <message>
         <location filename="ftpconfigdialog.ui" line="184"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If requested file have no extension this extension will be checked anf first existing file will be sent. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -351,8 +376,7 @@
     </message>
     <message>
         <location filename="ftpconfigdialog.ui" line="450"/>
-        <location filename="ftpconfigdialog.ui" line="603"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If checked, filename of program to save will be taken from program name eg O0051, :1246, %MPF456, %_N_PR25475002_MPF, $O0004.MIN%... &lt;/p&gt;&lt;p&gt;If filename will be empty (not found) user definied regular expression will be used. If not found date-time code will be uased as filename. &lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;If checked, user definied regular expression will be used first, if not found name of program will be used and if not found date-code.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -429,6 +453,11 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;Extracted file nane: (O1234.NC)&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;File name mask: TEST$6$5$4$3.$8E&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt;&quot;&gt;Result: TEST4321.NE &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ftpconfigdialog.ui" line="603"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If checked, filename of program to save will be taken from program name eg O0051, :1246, %MPF456, %_N_PR25475002_MPF, $O0004.MIN%... &lt;/p&gt;&lt;p&gt;If filename will be empty (not found) user definied regular expression will be used. If not found date-time code will be uased as filename. &lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -548,6 +577,19 @@ This setting can cause data loss if detection of filename fails.</source>
     <message>
         <location filename="ftpconfigdialog.ui" line="915"/>
         <source>&amp;Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ftpconfigdialog.cpp" line="36"/>
+        <source>FTP server configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>FtpControlConnection</name>
+    <message>
+        <location filename="ftpcontrolconnection.cpp" line="707"/>
+        <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -24,6 +24,7 @@
 #define COMMONINC_H
 
 #include<QString>
+#include<QStringList>
 #include<QRegExp>
 
 #define TABBED_MODE              0x01
@@ -42,6 +43,7 @@
 #define MODE_HEIDENHAIN_ISO      0x08
 #define MODE_TOOLTIPS            0x09
 #define MODE_LINUXCNC            0x0A
+#define MODE_MACH3               0x0B
 //#define MODE_FADAL               0x0B
 
 

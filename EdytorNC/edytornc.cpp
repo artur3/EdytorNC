@@ -124,6 +124,8 @@ EdytorNc::EdytorNc()
 
     mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
 
+    setAcceptDrops(true);
+
 }
 
 //**************************************************************************************************
@@ -1846,6 +1848,11 @@ void EdytorNc::createActions()
     findFilesAct->setToolTip(tr("Find files"));
     connect(findFilesAct, SIGNAL(triggered()), this, SLOT(findInFl()));
 
+    openProgramManagerAct = new QAction(QIcon(":/images/programmanager.svg"), tr("Start application \"CNC Program Manager\""), this);
+    //openAct->setShortcut(tr("Ctrl+"));
+    openProgramManagerAct->setToolTip( tr("Start application \"CNC Program Manager\""));
+    connect(openProgramManagerAct, SIGNAL(triggered()), this, SLOT(openProgramManager()));
+
     printAct = new QAction(QIcon(":/images/document-print.svg"), tr("&Print"), this);
     printAct->setShortcut(QKeySequence::Print);
     printAct->setToolTip(tr("Print file"));
@@ -2127,10 +2134,6 @@ void EdytorNc::createActions()
     FTPAppAct->setToolTip(tr("Start application \"FTP file server\""));
     connect(FTPAppAct, SIGNAL(triggered()), this, SLOT(startFTPServer()));
 
-    ProgManAppAct = new QAction(QIcon(":/images/ftp.svg"), tr("Start application \"CNC Program Manager\""), this);
-    //ProgManAppAct->setShortcut(tr("F3"));
-    ProgManAppAct->setToolTip(tr("Start application \"CNC Program Manager\""));
-    connect(ProgManAppAct, SIGNAL(triggered()), this, SLOT(startProgramManager()));
 
 }
 
@@ -2152,6 +2155,8 @@ void EdytorNc::createMenus()
     fileMenu->addAction(saveAct);
     fileMenu->addAction(saveAsAct);
     fileMenu->addAction(saveAllAct);
+    fileMenu->addSeparator();
+    fileMenu->addAction(openProgramManagerAct);
     fileMenu->addSeparator();
     fileMenu->addAction(findFilesAct);
     fileMenu->addSeparator();
@@ -2230,7 +2235,6 @@ void EdytorNc::createMenus()
     toolsMenu->addSeparator();
     toolsMenu->addAction(commAppAct);
     toolsMenu->addAction(FTPAppAct);
-    toolsMenu->addAction(ProgManAppAct);
 
     windowMenu = menuBar()->addMenu(tr("&Window"));
     updateWindowMenu();
@@ -2259,6 +2263,8 @@ void EdytorNc::createToolBars()
     fileToolBar->addAction(saveAct);
     fileToolBar->addAction(saveAllAct);
     fileToolBar->addAction(saveAsAct);
+    fileToolBar->addSeparator();
+    fileToolBar->addAction(openProgramManagerAct);
     fileToolBar->addSeparator();
     fileToolBar->addAction(findFilesAct);
     fileToolBar->addSeparator();
@@ -2343,6 +2349,7 @@ void EdytorNc::createStatusBar()
     highlightTypeCombo->addItem(tr("SINUMERIK OLD"), MODE_SINUMERIK);
     highlightTypeCombo->addItem(tr("SINUMERIK NEW"), MODE_SINUMERIK_840);
     highlightTypeCombo->addItem(tr("LinuxCNC"), MODE_LINUXCNC);
+    highlightTypeCombo->addItem(tr("MACH3"), MODE_MACH3);
     highlightTypeCombo->addItem(tr("TOOLTIPS"), MODE_TOOLTIPS);
 
     connect(highlightTypeCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(setHighLightMode(int)));
@@ -2545,6 +2552,8 @@ void EdytorNc::readSettings()
     currentPathCheckBox->setChecked(settings.value("FileBrowserShowCurrentFileDir", false).toBool());
     filePreviewSpinBox->setValue(settings.value("FilePreviewNo", 10).toInt());
 
+    activeWhenInFocusCheckBox->setChecked(settings.value("ClipboardHistoryOnlyInFocus", true).toBool());
+
 
     settings.beginGroup("CleanUpDialog");
 
@@ -2635,6 +2644,8 @@ void EdytorNc::writeSettings()
 
     settings.setValue("PanelHidden", panelHidden);
     settings.setValue("FileBrowserShowCurrentFileDir", currentPathCheckBox->isChecked());
+
+    settings.setValue("ClipboardHistoryOnlyInFocus", activeWhenInFocusCheckBox->isChecked());
 
     settings.setValue("FindToolBarShown", !findToolBar.isNull());
 
@@ -4847,7 +4858,7 @@ void EdytorNc::startFTPServer()
 //
 //**************************************************************************************************
 
-void EdytorNc::startProgramManager()
+void EdytorNc::openProgramManager()
 {
 
     QString fileName, path;
@@ -4916,6 +4927,11 @@ void EdytorNc::clipboardChanged()
     bool notFound = true;
 
     updateMenus();
+
+
+    if(activeWhenInFocusCheckBox->isChecked() && !isActiveWindow())
+        return;
+
 
     QString text = clipboard->text();
 
@@ -5140,7 +5156,6 @@ void EdytorNc::doShowInLineCalc()
 //
 //**************************************************************************************************
 
-
 void EdytorNc::watchFile(const QString& fileName, bool add)
 {
     if(fileChangeMonitor)
@@ -5159,6 +5174,43 @@ void EdytorNc::watchFile(const QString& fileName, bool add)
                 fileChangeMonitor->removePath(fileName);
         };
     };
+}
+
+//**************************************************************************************************
+//
+//**************************************************************************************************
+
+void EdytorNc::dropEvent(QDropEvent* event)
+{
+    const QMimeData* mimeData = event->mimeData();
+
+    // check for our needed mime type, here a file or a list of files
+    if (mimeData->hasUrls())
+    {
+        QList<QUrl> urlList = mimeData->urls();
+
+        // extract the local paths of the files
+        for (int i = 0; i < urlList.size() && i < 32; ++i)
+        {
+            openFile(urlList.at(i).toLocalFile());
+
+            qDebug() << "dropEvent " << urlList.at(i).toLocalFile();
+        };
+
+        event->acceptProposedAction();
+    };
+}
+
+//**************************************************************************************************
+//
+//**************************************************************************************************
+
+void EdytorNc::dragEnterEvent(QDragEnterEvent *e)
+{
+    if (e->mimeData()->hasUrls())
+    {
+        e->acceptProposedAction();
+    }
 }
 
 //**************************************************************************************************

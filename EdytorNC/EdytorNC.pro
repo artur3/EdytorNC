@@ -75,13 +75,6 @@ RESOURCES = ../application.qrc
 RC_FILE = edytornc.rc
 
 
-TRANSLATIONS = edytornc_pl.ts \
-    edytornc_ca.ts \
-    edytornc_de.ts \
-    edytornc_fi.ts \
-    edytornc_cs_CZ.ts \
-    edytornc_es.ts
-
 include("../version.mk")
 
 DESTDIR += $$OUT_PWD/../bin

@@ -22,7 +22,7 @@
 
 
 
-#include "FTPserverWindow.h"
+#include "ftpserverwindow.h"
 #include "../QtSingleApplication/qtsingleapplication.h"
 //#include <QApplication>
 

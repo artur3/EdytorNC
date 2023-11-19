@@ -703,6 +703,98 @@ QString writeTooltipFile()
     //*******************************************************************************************************************//
 
 
+    //*******************************************************************************************************************//
+    settings.beginGroup("MACH3");
+    //*******************************************************************************************************************//
+
+    settings.setValue("M00", QT_TR_NOOP("<b>M00</b> - program stop, unconditional"));
+    settings.setValue("M01", QT_TR_NOOP("<b>M01</b> - optional program stop"));
+    settings.setValue("M03", QT_TR_NOOP("<b>M03</b> - start spindle CW"));
+    settings.setValue("M04", QT_TR_NOOP("<b>M04</b> - start spindle CCW"));
+    settings.setValue("M05", QT_TR_NOOP("<b>M05</b> - spindle stop"));
+    settings.setValue("M06", QT_TR_NOOP("<b>M06</b> - tool change"));
+    settings.setValue("M08", QT_TR_NOOP("<b>M08</b> - coolant on"));
+    settings.setValue("M09", QT_TR_NOOP("<b>M09</b> - coolant off"));
+    settings.setValue("M10P2", QT_TR_NOOP("<b>M10P2</b> - THC ON"));
+    settings.setValue("M11P2", QT_TR_NOOP("<b>M11P2</b> - THC OFF"));
+    settings.setValue("M30", QT_TR_NOOP("<b>M30</b> - end of program"));
+    settings.setValue("M47", QT_TR_NOOP("<b>M47</b> - Repeat program from first line"));
+    settings.setValue("M48", QT_TR_NOOP("<b>M48</b> - Enable speed and feed overide"));
+    settings.setValue("M49", QT_TR_NOOP("<b>M49</b> - Disable speed and feed overide"));
+    settings.setValue("M98", QT_TR_NOOP("<b>M98 P</b>xxxx - macro xxxx call"));
+    settings.setValue("M99", QT_TR_NOOP("<b>M99</b> - subprogram end"));
+
+    settings.setValue("G0", QT_TR_NOOP("<b>G0</b> - rapid move - positioning"));
+    settings.setValue("G1", QT_TR_NOOP("<b>G1</b> - linear interpolation"));
+    settings.setValue("G2", QT_TR_NOOP("<b>G2</b> - circular/helical interpolation CW"));
+    settings.setValue("G3", QT_TR_NOOP("<b>G3</b> - circular/helical interpolation CCW"));
+    settings.setValue("G4", QT_TR_NOOP("<b>G4</b> - dwell"));
+    settings.setValue("G10", QT_TR_NOOP("<b>G10</b> - Coordinate system origin setting"));
+    settings.setValue("G12", QT_TR_NOOP("<b>G12</b> - Clockwise circular pocket"));
+    settings.setValue("G13", QT_TR_NOOP("<b>G13</b> - Counterclockwise circular pocket"));
+    settings.setValue("G15", QT_TR_NOOP("<b>G15</b> - Polar Coordinate system in G0"));
+    settings.setValue("G16", QT_TR_NOOP("<b>G16</b> - Polar Coordinate system in G1"));
+    settings.setValue("G17", QT_TR_NOOP("<b>G17</b> - XY plane"));
+    settings.setValue("G18", QT_TR_NOOP("<b>G18</b> - ZX plane"));
+    settings.setValue("G19", QT_TR_NOOP("<b>G19</b> - YZ plane"));
+    settings.setValue("G20", QT_TR_NOOP("<b>G20</b> - inch unit"));
+    settings.setValue("G21", QT_TR_NOOP("<b>G21</b> - mm unit"));
+    settings.setValue("G28", QT_TR_NOOP("<b>G28</b> - return home"));
+    settings.setValue("G28.1", QT_TR_NOOP("<b>G28.1</b> - reference axes"));
+    settings.setValue("G30", QT_TR_NOOP("<b>G30</b> - reference point return home"));
+    settings.setValue("G31", QT_TR_NOOP("<b>G31</b> - Straight Probe"));
+    settings.setValue("G32", QT_TR_NOOP("<b>G32</b> - (Lathe) Threading"));
+    settings.setValue("G40", QT_TR_NOOP("<b>G40</b> - tool nose/cutter radius compensation cancel"));
+    settings.setValue("G41", QT_TR_NOOP("<b>G41</b> - tool nose/cutter radius compensation left"));
+    settings.setValue("G42", QT_TR_NOOP("<b>G42</b> - tool nose/cutter radius compensation right"));
+    settings.setValue("G43", QT_TR_NOOP("<b>G43</b> - Apply tool length compensation (plus)"));
+    settings.setValue("G49", QT_TR_NOOP("<b>G49</b> - Cancel tool length compensation"));
+    settings.setValue("G50", QT_TR_NOOP("<b>G50</b> - Reset all scale factors to 1.0"));
+    settings.setValue("G51", QT_TR_NOOP("<b>G51</b> - Set axis scale factors"));
+    settings.setValue("G52", QT_TR_NOOP("<b>G52</b> - Temporary coordinate system offsets"));
+    settings.setValue("G53", QT_TR_NOOP("<b>G53</b> - machine coordinate system"));
+    settings.setValue("G54", QT_TR_NOOP("<b>G54</b> - settable zero offset 1"));
+    settings.setValue("G55", QT_TR_NOOP("<b>G55</b> - settable zero offset 2"));
+    settings.setValue("G56", QT_TR_NOOP("<b>G56</b> - settable zero offset 3"));
+    settings.setValue("G57", QT_TR_NOOP("<b>G57</b> - settable zero offset 4"));
+    settings.setValue("G58", QT_TR_NOOP("<b>G58</b> - settable zero offset 5"));
+    settings.setValue("G59", QT_TR_NOOP("<b>G59</b> - settable zero offset 6 /use general fixture number"));
+    settings.setValue("G61", QT_TR_NOOP("<b>G61</b> - Exact Stop"));
+    settings.setValue("G64", QT_TR_NOOP("<b>G64</b> - Constant Velocity mode"));
+    settings.setValue("G68", QT_TR_NOOP("<b>G68</b> - Rotate Coordinate System"));
+    settings.setValue("G69", QT_TR_NOOP("<b>G69</b> - Cancel Rotation Coordinate System"));
+    settings.setValue("G70", QT_TR_NOOP("<b>G70</b> - Inches Unit"));
+    settings.setValue("G71", QT_TR_NOOP("<b>G71</b> - mm Unit"));
+    settings.setValue("G73", QT_TR_NOOP("<b>G73</b> - Canned cycle - peck drilling"));
+    settings.setValue("G76", QT_TR_NOOP("<b>G76</b> - (Lathe) Threading cycle"));
+    settings.setValue("G80", QT_TR_NOOP("<b>G80</b> - Cancel motion mode"));
+    settings.setValue("G81", QT_TR_NOOP("<b>G81</b> - Canned cycle - drilling"));
+    settings.setValue("G82", QT_TR_NOOP("<b>G82</b> - Canned cycle - drilling with dwell"));
+    settings.setValue("G83", QT_TR_NOOP("<b>G83</b> - Canned cycle - peck drilling"));
+    settings.setValue("G85", QT_TR_NOOP("<b>G85</b> - Canned cycle - Boring or Reaming"));
+    settings.setValue("G86", QT_TR_NOOP("<b>G86</b> - Canned cycle - Boring"));
+    settings.setValue("G88", QT_TR_NOOP("<b>G88</b> - Canned cycle - Boring"));
+    settings.setValue("G89", QT_TR_NOOP("<b>G89</b> - Canned cycle - Boring"));
+    settings.setValue("G90", QT_TR_NOOP("<b>G90</b> - absolute programming"));
+    settings.setValue("G90.1", QT_TR_NOOP("<b>G90.1</b> - Set IJK Arc Mode absolute"));
+    settings.setValue("G91", QT_TR_NOOP("<b>G91</b> - incremental programming"));
+    settings.setValue("G91.1", QT_TR_NOOP("<b>G91.1</b> - Set IJK Arc Mode incremental"));
+    settings.setValue("G92", QT_TR_NOOP("<b>G92</b> - coordinate system setting"));
+    settings.setValue("G92.1", QT_TR_NOOP("<b>G92.1</b> - Reset coordinate system 5211, 5216 to zero"));
+    settings.setValue("G92.2", QT_TR_NOOP("<b>G92.2</b> - Reset coordinate system retaining current values"));
+    settings.setValue("G92.3", QT_TR_NOOP("<b>G92.3</b> - Set coordinate system to 5211, 5216 values"));
+    settings.setValue("G93", QT_TR_NOOP("<b>G93</b> - Inverse time"));
+    settings.setValue("G94", QT_TR_NOOP("<b>G94</b> - feed per minute"));
+    settings.setValue("G98", QT_TR_NOOP("<b>G98</b> - return to initial Z level"));
+    settings.setValue("G99", QT_TR_NOOP("<b>G99</b> - return to R level"));
+
+
+
+    //*******************************************************************************************************************//
+    settings.endGroup();  //  MACH3
+    //*******************************************************************************************************************//
+
+
     return fileName;
 
 }

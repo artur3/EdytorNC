@@ -57,6 +57,10 @@ MdiChild::MdiChild(QWidget *parent, Qt::WindowFlags f) : QWidget(parent, f)
    textEdit->setContextMenuPolicy(Qt::CustomContextMenu);
    connect(textEdit, SIGNAL(customContextMenuRequested(const QPoint&)),
               this, SLOT(showContextMenu(const QPoint &)));
+
+//   setAcceptDrops(true);
+//   textEdit->setAcceptDrops(false);
+
 }
 
 //**************************************************************************************************
@@ -613,6 +617,22 @@ void MdiChild::setMdiWindowProperites(_editor_properites opt)
 bool MdiChild::eventFilter(QObject *obj, QEvent *ev)
 {
     //qDebug() << "E" << ev->type() << obj->objectName();
+
+    // allow drag&drop file open
+    if((obj == textEdit->viewport()) && ((ev->type() == QEvent::Drop) || (ev->type() == QEvent::DragEnter)))
+    {
+        QDropEvent *dEvent = (QDropEvent*) ev;
+
+        const QMimeData* mimeData = dEvent->mimeData();
+
+        // check for our needed mime type, here a file or a list of files
+        if (mimeData->hasUrls())
+        {
+            return true;
+        }
+        else
+            return false;
+    };
 
     //better word selection
     if((obj == textEdit->viewport()) && (ev->type() == QEvent::MouseButtonDblClick))
@@ -1457,6 +1477,8 @@ bool MdiChild::event(QEvent *event)
          break;
       case MODE_LINUXCNC         : group = QLatin1String("LinuxCNC");
          break;
+      case MODE_MACH3            : group = QLatin1String("MACH3");
+         break;
       case MODE_TOOLTIPS         : group = QLatin1String("TOOLTIP");
          break;
       default                    : event->accept();
@@ -1468,17 +1490,18 @@ bool MdiChild::event(QEvent *event)
 
       QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
 
-      cursor = textEdit->cursorForPosition(helpEvent->pos());
-      cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor, 2);  //fix cursor position
+      cursor = textEdit->cursorForPosition(textEdit->mapFromGlobal(helpEvent->globalPos()));
+//      cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor, 2);  //fix cursor position
 
-      if(mdiWindowProperites.hColors.highlightMode == MODE_FANUC)
+      if((mdiWindowProperites.hColors.highlightMode == MODE_FANUC) || (mdiWindowProperites.hColors.highlightMode == MODE_MACH3))
       {
          do
          {
             cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
             key = cursor.selectedText();
 
-         }while(key.at(0).isLetter() && !key.isEmpty() && !cursor.atStart());
+         }while(!key.at(0).isLetter() && !key.isEmpty() && !cursor.atStart());
+
 
          cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
          do
@@ -1488,12 +1511,14 @@ bool MdiChild::event(QEvent *event)
 
          }while((key.length() > 0 ? ((key.at(key.length() - 1).isLetter()) || (key.at(key.length() - 1) == QLatin1Char('.'))): false) && !key.isEmpty() && !cursor.atBlockEnd());
 
+
          cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
 
          if(key.length() < 3)
          {
-            cursor = textEdit->cursorForPosition(helpEvent->pos());
-            cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor, 2);  //fix cursor position
+//            cursor = textEdit->cursorForPosition(helpEvent->pos());
+            cursor = textEdit->cursorForPosition(textEdit->mapFromGlobal(helpEvent->globalPos()));
+//            cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor, 2);  //fix cursor position
 
             do
             {
@@ -1501,6 +1526,7 @@ bool MdiChild::event(QEvent *event)
                key = cursor.selectedText();
 
             }while(!((key.at(0) == QLatin1Char('#')) || key.at(0).isLetter()) && !key.isEmpty() && !cursor.atStart());
+
 
             cursor.clearSelection();
             cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
@@ -1661,7 +1687,7 @@ int MdiChild::compute(QString *str)
          pos++;
       };
 
-      qDebug() << "123" << val1 << oper << oper << *str;
+      qDebug() << "compute 1" << val1 << oper << *str;
 
       if(val1.isEmpty())
       {
@@ -1754,7 +1780,7 @@ int MdiChild::compute(QString *str)
 
       for(i = pos+1; i <= str->length(); i++)
       {
-          qDebug() << "456,123" << val2 << str->at(i);
+          qDebug() << "compute 2" << val2 << str->at(i);
 
          if((str->at(i) == '.'))
          {
@@ -1804,9 +1830,14 @@ int MdiChild::compute(QString *str)
             dot = true;
          };
 
+         if(str->at(j).isDigit() && (val1[0] == '-'))
+         {
+            break;
+         };
+
          if((str->at(j) == '-'))
          {
-            if((minus))
+             if((minus))
             {
                break;
             };
@@ -1822,10 +1853,13 @@ int MdiChild::compute(QString *str)
             break;
 
          val1.prepend(str->at(j));
+
+         qDebug() << "compute 2.9" << val1 << j << str->at(j) << minus;
       };
+
       j++;
 
-       qDebug() << "456" << val1 << oper << val2 << *str;
+      qDebug() << "compute 3" << val1 << oper << val2 << *str;
 
       if(val1.isEmpty())
          return(ERR_NO_PARAM);  // val1 = "0";
@@ -1833,6 +1867,7 @@ int MdiChild::compute(QString *str)
       if(val2.isEmpty())
          return(ERR_NO_PARAM);  // val2 = "0";
 
+      ok = ok1 = true;
 
       while(1)
       {
@@ -1850,16 +1885,17 @@ int MdiChild::compute(QString *str)
          break;
 
       };
-      if(!ok || !ok1)
+
+      if((!ok) || (!ok1))
          return(ERR_CONVERT);
 
-      pos++;
+      //pos++;
 
       partmp.number(result, 'g', 3);
       str->replace(j, (i-j)+1, QString("%1").arg(result, 3, 'f', 3));
    };
 
-   qDebug() << "9857" << val1 << val2 << *str;
+   qDebug() << "compute 4" << val1 << val2 << *str;
 
    pos = 1;
    exp.setPattern("[+-]{1,1}");
@@ -1868,7 +1904,7 @@ int MdiChild::compute(QString *str)
    {
       oper = str->mid(pos, 1);
 
-      qDebug() << "789,000" << oper << pos;
+      qDebug() << "compute 5" << oper << pos;
 
       val2 = "";
       dot = false;
@@ -1876,7 +1912,7 @@ int MdiChild::compute(QString *str)
 
       for(i = pos+1; i <= str->length(); i++)
       {
-          qDebug() << "789,123" << val2 << str->at(i);
+          qDebug() << "compute 6" << val2 << str->at(i);
 
          if((str->at(i) == '.'))
          {
@@ -1920,7 +1956,7 @@ int MdiChild::compute(QString *str)
 
       for(j = pos-1; j >= 0; j--)
       {
-          qDebug() << "789,456" << val1 << str->at(j);
+          qDebug() << "compute 7" << val1 << str->at(j);
 
          if((str->at(j) == '.'))
          {
@@ -1958,7 +1994,7 @@ int MdiChild::compute(QString *str)
          oper = "+";
       };
 
-      qDebug() << "789" << val1 << oper << val2 << *str;
+      qDebug() << "compute 8" << val1 << oper << val2 << *str;
 
       if(val1.isEmpty())
          val1 = "0";  //return(ERR_NO_PARAM);
@@ -1981,10 +2017,10 @@ int MdiChild::compute(QString *str)
       if(!ok || !ok1)
          return(ERR_CONVERT);
 
-      pos++;
+      //pos++;
 
       partmp.number(result, 'g', 3);
-      str->replace(j, (i-j)+1, QString( "%1" ).arg( result, 0, 'f', 3 ));
+      str->replace(j, (i-j)+1, QString( "%1").arg(result, 0, 'f', 3));
    };
 
    str->remove('(');
@@ -2021,7 +2057,7 @@ int MdiChild::processBrc(QString *str)
 
       par.remove(' ');
 
-      qDebug() << "147" << par << pos;
+      qDebug() << "processBrc 1 " << par << pos;
 
       err = compute(&par);
       if(err < 0)
@@ -2034,7 +2070,8 @@ int MdiChild::processBrc(QString *str)
          return(err);
    };
 
-   qDebug() << "852" << *str;
+   qDebug() << "processBrc 2 " << *str;
+
    err = compute(str);
    return(err);
 }
@@ -3931,12 +3968,14 @@ void MdiChild::doSwapAxes(QString textToFind, QString replacedText, double min, 
 void MdiChild::filePrintPreview()
 {
 #ifndef QT_NO_PRINTER
+
     QPrinter printer(QPrinter::HighResolution);
     printer.setPageMargins(15, 10, 10, 10, QPrinter::Millimeter);
     QPrintPreviewDialog preview(&printer, this);
     preview.setWindowFlags(Qt::Window);
     connect(&preview, SIGNAL(paintRequested(QPrinter *)), SLOT(printPreview(QPrinter *)));
     preview.exec();
+
 #endif
 }
 
@@ -3947,7 +3986,9 @@ void MdiChild::filePrintPreview()
 void MdiChild::printPreview(QPrinter *printer)
 {
 #ifndef QT_NO_PRINTER
+
     textEdit->print(printer);
+
 #endif
 }
 
@@ -4291,7 +4332,7 @@ void MdiChild::inLineCalcReturnPressed()
         if(inLineCalcChar.isLetter())
             text.prepend(inLineCalcChar);
 
-        qDebug() << "Text" << text << result;
+        qDebug() << "inLineCalcReturnPressed " << text << result;
 
         if(result >= 0)
             textEdit->insertPlainText(text);

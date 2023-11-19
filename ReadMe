@@ -61,9 +61,6 @@ EdytorNC is developed in QT Creator (best for compile EdytorNC) (libs Qt 5.12) :
 Cross platform installer made by BitRock InstallBuilder for Qt : http://installbuilder.bitrock.com
 
 
-If you have any suggestion (bug/translations mistakes) about EdytorNC please email me - artkoz78(at)gmail.com. 
-
-
 
 To compile EdytorNC :
 - install Qt5 SDK. Download: http://www.qt.io/download-open-source/#section-2  or use your software manager

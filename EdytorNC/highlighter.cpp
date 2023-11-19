@@ -106,7 +106,7 @@ void Highlighter::loadRules()
 
    if(highlightColors.highlightMode == MODE_OKUMA || highlightColors.highlightMode == MODE_PHILIPS
       || highlightColors.highlightMode == MODE_FANUC || highlightColors.highlightMode == MODE_SINUMERIK
-      || highlightColors.highlightMode == MODE_AUTO)  // () comment
+      || highlightColors.highlightMode == MODE_MACH3 || highlightColors.highlightMode == MODE_AUTO)  // () comment
    {
       commentStartExpression = QRegExp("\\s\\(|^\\(");
       commentEndExpression = QRegExp("\\)");
@@ -279,7 +279,7 @@ void Highlighter::loadRules()
 
    if(highlightColors.highlightMode == MODE_TOOLTIPS)  // EdytorNC Tooltips
    {
-      pattern = "^(\\[)(OKUMA|SINUMERIK|SINUMERIK_840|FANUC|PHILIPS|HEIDENHAIN|HEIDENHAIN_ISO|MODE_LINUXCNC)(\\])$"; //
+      pattern = "^(\\[)(OKUMA|SINUMERIK|SINUMERIK_840|FANUC|PHILIPS|HEIDENHAIN|HEIDENHAIN_ISO|MACH3|LINUXCNC)(\\])$"; //
       pogRule.pattern = QRegExp(pattern);
       progNameHighlightRules.append(pogRule);
 
@@ -322,6 +322,8 @@ void Highlighter::highlightBlock(const QString &tx)
       case MODE_LINUXCNC         : highlightBlockLinuxCNCRule(tx.toUpper());
                                    break;
       case MODE_TOOLTIPS         : highlightBlockToolTipsRule(tx);
+                                   break;
+      case MODE_MACH3            : highlightBlockFanucRule(tx);
                                    break;
       default                    : ;
 

@@ -50,7 +50,7 @@ HEADERS  += ftpserverwindow.h\
 FORMS    += ftpserverwindow.ui\
          ftpconfigdialog.ui
 
-TRANSLATIONS = edytornc_pl.ts
+#TRANSLATIONS = edytornc_pl.ts
 
 RC_FILE = ftpserver.rc
 

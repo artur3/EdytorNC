@@ -66,6 +66,8 @@ protected:
     void closeEvent(QCloseEvent *event);
     bool eventFilter(QObject *obj, QEvent *ev);
     bool event(QEvent *event);
+    void dropEvent(QDropEvent* event);
+    void dragEnterEvent(QDragEnterEvent *e);
 
 private slots:
     MdiChild *newFile();
@@ -175,7 +177,8 @@ private slots:
     void clipboardTreeViewContextMenu(const QPoint &point);
     void doShowInLineCalc();
     void watchFile(const QString& fileName, bool add);
-    void startProgramManager();
+    void openProgramManager();
+
 
 signals:
     void needToShow();
@@ -257,6 +260,7 @@ private:
     QAction *saveAllAct;
     QAction *saveAsAct;
     QAction *exitAct;
+    QAction *openProgramManagerAct;
     QAction *findFilesAct;
     QAction *printAct;
     QAction *printPreviewAct;
@@ -318,7 +322,6 @@ private:
     QAction *diffEditorAct;
     QAction *commAppAct;
     QAction *FTPAppAct;
-    QAction *ProgManAppAct;
 
     QProcess *proc;
     QProcess *sfsProc;
