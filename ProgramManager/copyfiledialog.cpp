@@ -174,14 +174,15 @@ void copyFileDialog::findLastFileNumber()
 {
     int start = 0;
     int len = 0;
+    int prevSrcNum = 0, srcDiff = 0;
     int num, prevNum = 0, startNum = 0, maxNum;
     QString nextName;
     QSqlQuery query;
+    bool isSrcNumEven = false;
 
 
-    for(int i = 0; i < 8; i++)
+    for(int i = 0; i < 6; i++)
     {
-
         start = 0;
         len = 0;
 
@@ -191,59 +192,68 @@ void copyFileDialog::findLastFileNumber()
         if((srcLabel == 0) || (dsLineEdit == 0))
             break ;
 
-
         num = isFileNameNumeric(srcLabel->text(), start, len);
 
-        maxNum = num;
-        startNum = 1;  // startNum = num;
-
-        if(db->isOpen() && (num > 0))
+        if(i == 0)
         {
+            srcDiff = 0;
+            prevSrcNum = num;
 
-            do
+            isSrcNumEven = (num & 1) == 0;
+            maxNum = prevNum = num;
+            startNum = 1;  // startNum = num;
+
+            if(db->isOpen() && (num > 0))
             {
-                maxNum = maxNum + 100;
-                prevNum = num;
-
-                query.prepare(QString("SELECT MAX(cast(SUBSTR(fileName, %1, %2) as integer)) FROM programs WHERE machine=:machine AND cast(SUBSTR(fileName, %1, %2) as integer) BETWEEN %3 AND %4").arg(start + 1).arg(len).arg(startNum).arg(maxNum));
-                query.bindValue(":machine", ui->copyToComboBox->currentText());
-                query.exec();
-
-                while (query.next())
+                do
                 {
-                    num = query.value(0).toString().toInt();
-                };
+                    maxNum = maxNum + 100;
+                    prevNum = num;
 
-                startNum = maxNum;
+                    query.prepare(QString("SELECT MAX(cast(SUBSTR(fileName, %1, %2) as integer)) FROM programs WHERE machine=:machine AND cast(SUBSTR(fileName, %1, %2) as integer) BETWEEN %3 AND %4").arg(start + 1).arg(len).arg(startNum).arg(maxNum));
+                    query.bindValue(":machine", ui->copyToComboBox->currentText());
+                    query.exec();
 
+                    while (query.next())
+                    {
+                        num = query.value(0).toString().toInt();
+                    };
 
+                    startNum = maxNum;
 
-                qDebug() << "findLastFileNumber: " << "SELECT: " << num;
-                qDebug() << "findLastFileNumber: " << "SELECT error: " << query.lastError().text();
-                qDebug() << "findLastFileNumber: " << "SELECT query: " << query.lastQuery();
+                    qDebug() << "findLastFileNumber: " << "SELECT: " << num;
+                    qDebug() << "findLastFileNumber: " << "SELECT error: " << query.lastError().text();
+                    qDebug() << "findLastFileNumber: " << "SELECT query: " << query.lastQuery();
 
-            }while(num > 0);
+                }while(num > 0);
 
-            prevNum++;
-            prevNum = prevNum + i;
-            nextName = QString::number(prevNum);
+                prevNum++;
 
-            while(nextName.length() < len)
-                nextName.prepend('0');
-
-            nextName = srcLabel->text().replace(start, len, nextName);
-
-            dsLineEdit->setText(nextName);
-
-
+                if(isSrcNumEven != ((prevNum & 1) == 0))
+                    prevNum++;
+            };
+        }
+        else
+        {
+            srcDiff = num - prevSrcNum;
+            prevSrcNum = num;
         };
 
-        qDebug() << "setSource: " << ui->copyToComboBox->currentText() << srcLabel->text() << num << prevNum << maxNum;
 
+        prevNum = prevNum + srcDiff;
+
+        nextName = QString::number(prevNum);
+
+        while(nextName.length() < len)
+            nextName.prepend('0');
+
+        nextName = srcLabel->text().replace(start, len, nextName);
+
+        dsLineEdit->setText(nextName);
+
+        qDebug() << "setSource: " << ui->copyToComboBox->currentText() << srcLabel->text() << isSrcNumEven << num << prevNum << maxNum;
 
     };
-
-
 
 }
 
