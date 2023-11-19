@@ -1418,7 +1418,7 @@ void MainWindow::openInEditor(QString files)
     path = QDir::toNativeSeparators(path);
 
 #ifdef Q_OS_LINUX
-    fileName = path + "EdytorNC";
+    exeName = path + "EdytorNC";
 #endif
 
 #ifdef Q_OS_WIN32

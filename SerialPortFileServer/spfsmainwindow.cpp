@@ -23,7 +23,7 @@
 
 
 #include "spfsmainwindow.h"
-#include "ui_SPFSMainWindow.h"
+#include "ui_spfsmainwindow.h"
 #include <QDebug>
 
 
