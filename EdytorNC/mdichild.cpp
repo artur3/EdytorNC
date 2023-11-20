@@ -1891,8 +1891,11 @@ int MdiChild::compute(QString *str)
 
       //pos++;
 
-      partmp.number(result, 'g', 3);
-      str->replace(j, (i-j)+1, QString("%1").arg(result, 3, 'f', 3));
+      partmp = QString("%1").arg(result, 0, 'f', 3);
+      str->replace(j, (i - j) + 1, partmp);
+
+      pos = pos - ((i - j) + 1);
+      pos = pos + partmp.length();
    };
 
    qDebug() << "compute 4" << val1 << val2 << *str;
@@ -1994,8 +1997,6 @@ int MdiChild::compute(QString *str)
          oper = "+";
       };
 
-      qDebug() << "compute 8" << val1 << oper << val2 << *str;
-
       if(val1.isEmpty())
          val1 = "0";  //return(ERR_NO_PARAM);
 
@@ -2014,13 +2015,19 @@ int MdiChild::compute(QString *str)
          break;
 
       };
+
       if(!ok || !ok1)
          return(ERR_CONVERT);
 
-      //pos++;
+//      pos++;
 
-      partmp.number(result, 'g', 3);
-      str->replace(j, (i-j)+1, QString( "%1").arg(result, 0, 'f', 3));
+      qDebug() << "compute 8" << val1 << oper << val2 << *str << pos << (i-j);
+
+      partmp = QString("%1").arg(result, 0, 'f', 3);
+      str->replace(j, (i - j) + 1, partmp);
+
+      pos = pos - ((i - j) + 1);
+      pos = pos + partmp.length();
    };
 
    str->remove('(');
