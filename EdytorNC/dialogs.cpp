@@ -75,7 +75,7 @@ I2MDialog::I2MDialog(QWidget * parent, Qt::WindowFlags f) : QDialog(parent, f)
 
    //setMaximumSize(width(), height());
 
-   connect(inchInput, SIGNAL(textChanged(const QString&)), SLOT(inputChanged()));
+   connect(inchInput, SIGNAL(textChanged(QString)), SLOT(inputChanged()));
    connect(inchCheckBox, SIGNAL(toggled(bool)), SLOT(checkBoxToggled()));
    connect(mmCheckBox, SIGNAL(toggled(bool)), SLOT(checkBoxToggled()));
    connect(closePushButton, SIGNAL(clicked()), SLOT(close()));
@@ -273,12 +273,12 @@ FeedsDialog::FeedsDialog( QWidget * parent, Qt::WindowFlags f) : QDialog(parent,
 
    setMaximumSize(width(), height());
 
-   connect(vcInput, SIGNAL(textChanged(const QString&)), SLOT(inputChanged()));
-   connect(fzInput, SIGNAL(textChanged(const QString&)), SLOT(inputChanged()));
-   connect(dInput, SIGNAL(textChanged(const QString&)), SLOT(inputChanged()));
-   connect(zInput, SIGNAL(textChanged(const QString&)), SLOT(inputChanged()));
-   connect(sInput, SIGNAL(textChanged(const QString&)), SLOT(inputChanged()));
-   connect(fInput, SIGNAL(textChanged(const QString&)), SLOT(inputChanged()));
+   connect(vcInput, SIGNAL(textChanged(QString)), SLOT(inputChanged()));
+   connect(fzInput, SIGNAL(textChanged(QString)), SLOT(inputChanged()));
+   connect(dInput, SIGNAL(textChanged(QString)), SLOT(inputChanged()));
+   connect(zInput, SIGNAL(textChanged(QString)), SLOT(inputChanged()));
+   connect(sInput, SIGNAL(textChanged(QString)), SLOT(inputChanged()));
+   connect(fInput, SIGNAL(textChanged(QString)), SLOT(inputChanged()));
 
    connect(mmCheckBox, SIGNAL(stateChanged(int)), SLOT(checkBoxChanged()));
    connect(inchCheckBox, SIGNAL(stateChanged(int)), SLOT(checkBoxChanged()));
@@ -781,7 +781,7 @@ DotDialog::DotDialog(QWidget * parent, Qt::WindowFlags f) : QDialog(parent, f)
 
    setWindowTitle(tr("Insert dots"));
 
-   connect(mInput, SIGNAL(textChanged(const QString&)), this, SLOT(inputChanged(const QString &)) );
+   connect(mInput, SIGNAL(textChanged(QString)), this, SLOT(inputChanged(QString)) );
    connect(mCheckAtEnd, SIGNAL(clicked()), this, SLOT(atEndClicked()));
    connect(mCheckDivide, SIGNAL(clicked()), this, SLOT(divideClicked()));
    connect(mSpinBox, SIGNAL(valueChanged(int)), this, SLOT(spinBoxVal(int)));
@@ -875,23 +875,321 @@ void DotDialog::divideClicked()
 
 void DotDialog::spinBoxVal(int val)
 {
-  if((val == 99))
+  if(val == 99)
     mSpinBox->setValue(10);
   else
-    if((val == 999))
+    if(val == 999)
       mSpinBox->setValue(10);
     else
-      if((val == 9999))
+      if(val == 9999)
         mSpinBox->setValue(100);
 
-  if((val == 11))
+  if(val == 11)
     mSpinBox->setValue(100);
   else
-    if((val == 101))
+    if(val == 101)
       mSpinBox->setValue(1000);
     else
-      if((val == 1001))
+      if(val == 1001)
         mSpinBox->setValue(10000);
+}
+
+//**************************************************************************************************
+//
+//**************************************************************************************************
+PolygonDialog::PolygonDialog( QWidget * parent, Qt::WindowFlags f) : QDialog(parent, f)
+{
+
+    setupUi(this);
+    setAttribute(Qt::WA_DeleteOnClose);
+    setWindowTitle(tr("Solution of polygons"));
+
+    pic1 = new QPixmap(":/images/polygons.png");
+
+    piclabel->setPixmap(*pic1);
+    piclabel->adjustSize();
+
+    setWindowFlags(windowFlags().setFlag(Qt::WindowContextHelpButtonHint, false));
+
+    connect(comboBox_sides, SIGNAL(currentIndexChanged(int)), SLOT(noOfSidesChanged()));
+    connect(comboBox_calc, SIGNAL(currentIndexChanged(int)), SLOT(calcChanged()));
+
+    connect(computeButton, SIGNAL(clicked()), SLOT(computeButtonClicked()));
+    connect(clearButton, SIGNAL(clicked()), SLOT(clearButtonClicked()));
+    connect(closeButton, SIGNAL(clicked()), SLOT(close()));
+
+    QValidator *aAInputValid = new QDoubleValidator(0.001, 9999, 3, this);
+    outr_lineEdit->setValidator(aAInputValid);
+    outr_lineEdit->installEventFilter(this);
+
+    QValidator *aBInputValid = new QDoubleValidator(0.001, 9999, 3, this);
+    inr_lineEdit->setValidator(aBInputValid);
+    inr_lineEdit->installEventFilter(this);
+
+    QValidator *aCInputValid = new QDoubleValidator(0.001, 9999, 3, this);
+    len_lineEdit->setValidator(aCInputValid);
+    len_lineEdit->installEventFilter(this);
+
+    QValidator *aDInputValid = new QDoubleValidator(0.001, 9999, 3, this);
+    ina_lineEdit->setValidator(aDInputValid);
+    ina_lineEdit->installEventFilter(this);
+
+    QValidator *aEInputValid = new QDoubleValidator(0.001, 9999, 3, this);
+    exa_lineEdit->setValidator(aEInputValid);
+    exa_lineEdit->installEventFilter(this);
+
+    QValidator *aFInputValid = new QDoubleValidator(0.001, 9999, 3, this);
+    area_lineEdit->setValidator(aFInputValid);
+    area_lineEdit->installEventFilter(this);
+
+    clearButtonClicked();
+}
+
+//**************************************************************************************************
+//
+//**************************************************************************************************
+
+PolygonDialog::~PolygonDialog()
+{
+
+}
+
+bool PolygonDialog::eventFilter(QObject *obj, QEvent *ev)
+{
+    if(qobject_cast<QLineEdit *>(obj))
+    {
+        if(ev->type() == QEvent::KeyPress)
+        {
+            QKeyEvent *k = (QKeyEvent*) ev;
+
+            if(QLocale().decimalPoint() == '.')
+                if(k->key() == Qt::Key_Comma)
+                {
+                    QApplication::sendEvent(obj, new QKeyEvent(QEvent::KeyPress, Qt::Key_Period, Qt::NoModifier, ".", false, 1));
+                    return true;
+                };
+
+            if(QLocale().decimalPoint() == ',')
+                if(k->key() == Qt::Key_Period)
+                {
+                    QApplication::sendEvent(obj, new QKeyEvent(QEvent::KeyPress, Qt::Key_Comma, Qt::NoModifier, ",", false, 1));
+                    return true;
+                };
+        };
+        return false;
+    }
+    else
+    {
+        // pass the event on to the parent class
+        return eventFilter(obj, ev);
+    };
+}
+
+
+void PolygonDialog::clearButtonClicked() {
+    outr_lineEdit->setText("");
+    inr_lineEdit->setText("");
+    len_lineEdit->setText("");
+    ina_lineEdit->setText("");
+    exa_lineEdit->setText("");
+    area_lineEdit->setText("");
+
+    comboBox_sides->setCurrentIndex(2);
+    comboBox_calc->setCurrentIndex(0);
+    calcChanged();
+}
+
+void PolygonDialog::computeButtonClicked() {
+    int i = comboBox_calc->currentIndex();
+    int tmp = comboBox_sides->currentIndex();
+    tmp = tmp+3;
+
+    switch(i) {
+    case 0:
+        calc_have_len(tmp);
+        break;
+    case 1:
+        calc_have_inr(tmp);
+        break;
+    case 2:
+        calc_have_outr(tmp);
+        break;
+    case 3:
+        calc_have_area(tmp);
+        break;
+    }
+
+}
+
+void PolygonDialog::noOfSidesChanged() {
+
+}
+
+void PolygonDialog::calcChanged() {
+    int i = comboBox_calc->currentIndex();
+
+    outr_lineEdit->setText("");
+    inr_lineEdit->setText("");
+    len_lineEdit->setText("");
+    ina_lineEdit->setText("");
+    exa_lineEdit->setText("");
+    area_lineEdit->setText("");
+    outr_lineEdit->setStyleSheet("background-color: rgb(242, 242, 242);");
+    inr_lineEdit->setStyleSheet("background-color: rgb(242, 242, 242);");
+    len_lineEdit->setStyleSheet("background-color: rgb(242, 242, 242);");
+    ina_lineEdit->setStyleSheet("background-color: rgb(242, 242, 242);");
+    exa_lineEdit->setStyleSheet("background-color: rgb(242, 242, 242);");
+    area_lineEdit->setStyleSheet("background-color: rgb(242, 242, 242);");
+    outr_lineEdit->setReadOnly(true);
+    inr_lineEdit->setReadOnly(true);
+    len_lineEdit->setReadOnly(true);
+    ina_lineEdit->setReadOnly(true);
+    exa_lineEdit->setReadOnly(true);
+    area_lineEdit->setReadOnly(true);
+
+    switch(i) {
+    case 0:
+        len_lineEdit->setReadOnly(false);
+        len_lineEdit->setStyleSheet("background-color: rgb(255, 255, 255);");
+        break;
+    case 1:
+        inr_lineEdit->setReadOnly(false);
+        inr_lineEdit->setStyleSheet("background-color: rgb(255, 255, 255);");
+        break;
+    case 2:
+        outr_lineEdit->setReadOnly(false);
+        outr_lineEdit->setStyleSheet("background-color: rgb(255, 255, 255);");
+        break;
+    case 3:
+        area_lineEdit->setReadOnly(false);
+        area_lineEdit->setStyleSheet("background-color: rgb(255, 255, 255);");
+        break;
+    }
+
+}
+
+void PolygonDialog::calc_have_outr(int sides) { //sides and sd
+    bool ok;
+    double r, smallr, angle, los, a;
+
+    r = QLocale().toDouble(outr_lineEdit->text(), &ok);
+    los = (2*r) * sin((pi/sides));
+    len_lineEdit->setText(QString("%1").arg(los, 0, 'f', 3));
+
+    r = QLocale().toDouble(outr_lineEdit->text(), &ok);
+    smallr = r * cos((pi/sides));
+    inr_lineEdit->setText(QString("%1").arg(smallr, 0, 'f', 3));
+
+    a= ((((los*los))*sides)/4) * (1/(tan(pi/sides)));
+    area_lineEdit->setText(QString("%1").arg(a, 0, 'f', 3));
+
+    angle=(((double)sides-2)/sides)*180.0;
+    ina_lineEdit->setText(QString("%1").arg(angle, 0, 'f', 3));
+
+    angle = 360/sides;
+    exa_lineEdit->setText(QString("%1").arg(angle, 0, 'f', 3));
+}
+
+void PolygonDialog::calc_have_inr(int sides) { //sides and daf
+    bool ok;
+    double r, daf, angle, los, a;
+
+    r = QLocale().toDouble(inr_lineEdit->text(), &ok);
+    los = (2 * r) * tan((pi/sides));
+    len_lineEdit->setText(QString("%1").arg(los, 0, 'f', 3));
+
+    daf = r * (1/(cos(pi/sides)));
+    outr_lineEdit->setText(QString("%1").arg(daf, 0, 'f', 3));
+
+    a = (sides * (r*r)) * tan(pi/sides);
+    area_lineEdit->setText(QString("%1").arg(a, 0, 'f', 3));
+
+    angle=(((double)sides-2)/sides)*180.0;
+    ina_lineEdit->setText(QString("%1").arg(angle, 0, 'f', 3));
+
+    angle = 360/sides;
+    exa_lineEdit->setText(QString("%1").arg(angle, 0, 'f', 3));
+}
+
+void PolygonDialog::calc_have_len(int sides) {
+    bool ok;
+    double bigr, smallr, angle, los, area;
+
+    los = QLocale().toDouble(len_lineEdit->text(), &ok);
+
+    bigr = los/(2*sin((pi/sides)));
+    outr_lineEdit->setText(QString("%1").arg(bigr, 0, 'f', 3));
+
+    smallr = los/(2*tan((pi/sides)));
+    inr_lineEdit->setText(QString("%1").arg(smallr, 0, 'f', 3));
+
+    area = (sides * (los * los) / (4 * tan(pi/sides)));
+    area_lineEdit->setText(QString("%1").arg(area, 0, 'f', 3));
+
+    angle=(((double)sides-2)/sides)*180.0;
+    ina_lineEdit->setText(QString("%1").arg(angle, 0, 'f', 3));
+
+    angle = 360/sides;
+    exa_lineEdit->setText(QString("%1").arg(angle, 0, 'f', 3));
+}
+
+void PolygonDialog::calc_ina(int sides) {
+    double angle=(((double)sides-2)/sides)*180.0;
+    ina_lineEdit->setText(QString("%1").arg(angle, 0, 'f', 3));
+}
+
+void PolygonDialog::calc_exa(int sides) {
+    double a = 360/sides;
+    exa_lineEdit->setText(QString("%1").arg(a, 0, 'f', 3));
+}
+
+void PolygonDialog::calc_have_area(int sides) {
+    bool ok;
+    double angle, len, a, bigr, smallr;
+
+    a = QLocale().toDouble(area_lineEdit->text(), &ok);
+    len = sqrt(((4 * tan(pi/sides)) * a)/sides);
+    len_lineEdit->setText(QString("%1").arg(len, 0, 'f', 3));
+
+    bigr = len/(2*sin((pi/sides)));
+    outr_lineEdit->setText(QString("%1").arg(bigr, 0, 'f', 3));
+
+    smallr = len/(2*tan((pi/sides)));
+    inr_lineEdit->setText(QString("%1").arg(smallr, 0, 'f', 3));
+
+    angle=(((double)sides-2)/sides)*180.0;
+    ina_lineEdit->setText(QString("%1").arg(angle, 0, 'f', 3));
+
+    angle = 360/sides;
+    exa_lineEdit->setText(QString("%1").arg(angle, 0, 'f', 3));
+}
+
+//**************************************************************************************************
+//
+//**************************************************************************************************
+ErTorqueDialog::ErTorqueDialog( QWidget * parent, Qt::WindowFlags f) : QDialog(parent, f)
+{
+
+    setupUi(this);
+    setAttribute(Qt::WA_DeleteOnClose);
+    setWindowTitle(tr("ER Torque table"));
+    setWindowFlags(windowFlags().setFlag(Qt::WindowContextHelpButtonHint, false));
+
+    Ui_ErTorqueDialog::tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+
+
+    connect(closeButton, SIGNAL(clicked()), SLOT(close()));
+
+
+}
+
+//**************************************************************************************************
+//
+//**************************************************************************************************
+
+ErTorqueDialog::~ErTorqueDialog()
+{
+
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -954,12 +1252,12 @@ TriangleDialog::TriangleDialog( QWidget * parent, Qt::WindowFlags f) : QDialog(p
 
    setMaximumSize(width(), height());
 
-   connect(aInput, SIGNAL(textChanged(const QString&)), SLOT(inputChanged()));
-   connect(bInput, SIGNAL(textChanged(const QString&)), SLOT(inputChanged()));
-   connect(cInput, SIGNAL(textChanged(const QString&)), SLOT(inputChanged()));
-   connect(aAInput, SIGNAL(textChanged(const QString&)), SLOT(inputChanged()));
-   connect(aBInput, SIGNAL(textChanged(const QString&)), SLOT(inputChanged()));
-   connect(aCInput, SIGNAL(textChanged(const QString&)), SLOT(inputChanged()));
+   connect(aInput, SIGNAL(textChanged(QString)), this, SLOT(inputChanged()));
+   connect(bInput, SIGNAL(textChanged(QString)), SLOT(inputChanged()));
+   connect(cInput, SIGNAL(textChanged(QString)), SLOT(inputChanged()));
+   connect(aAInput, SIGNAL(textChanged(QString)), SLOT(inputChanged()));
+   connect(aBInput, SIGNAL(textChanged(QString)), SLOT(inputChanged()));
+   connect(aCInput, SIGNAL(textChanged(QString)), SLOT(inputChanged()));
 
    rightTriangleCheckBoxToggled();
    checkBoxToggled();
@@ -1620,17 +1918,17 @@ BHCTab::BHCTab( QWidget * parent) : QWidget(parent)
    resultTable->setHorizontalHeaderLabels(QStringList()<<"X"<<"Y");
 
 
-   connect(resultTable, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(contextMenuReq(const QPoint &)));
+   connect(resultTable, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenuReq(QPoint)));
    resultTable->setSelectionBehavior(QAbstractItemView::SelectRows);
    resultTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
 ;
 
-   connect(xCenterInput, SIGNAL(textChanged(const QString&)), this, SLOT(inputChanged()));
-   connect(yCenterInput, SIGNAL(textChanged(const QString&)), this, SLOT(inputChanged()));
-   connect(diaInput, SIGNAL(textChanged(const QString&)), this, SLOT(inputChanged()));
-   connect(holesInput, SIGNAL(textChanged(const QString&)), this, SLOT(inputChanged()));
-   connect(angleStartInput, SIGNAL(textChanged(const QString&)), this, SLOT(inputChanged()));
-   connect(angleBeetwenInput, SIGNAL(textChanged(const QString&)), this, SLOT(inputChanged()));
+   connect(xCenterInput, SIGNAL(textChanged(QString)), this, SLOT(inputChanged()));
+   connect(yCenterInput, SIGNAL(textChanged(QString)), this, SLOT(inputChanged()));
+   connect(diaInput, SIGNAL(textChanged(QString)), this, SLOT(inputChanged()));
+   connect(holesInput, SIGNAL(textChanged(QString)), this, SLOT(inputChanged()));
+   connect(angleStartInput, SIGNAL(textChanged(QString)), this, SLOT(inputChanged()));
+   connect(angleBeetwenInput, SIGNAL(textChanged(QString)), this, SLOT(inputChanged()));
 
 }
 
@@ -2670,11 +2968,11 @@ ChamferDialog::ChamferDialog(QWidget *parent, Qt::WindowFlags f) : QDialog(paren
 
    //setMaximumSize(width(), height());
 
-   connect(angInput, SIGNAL(textChanged(const QString&)), SLOT(inputChanged()));
-   connect(zlInput, SIGNAL(textChanged(const QString&)), SLOT(inputChanged()));
-   connect(dlInput, SIGNAL(textChanged(const QString&)), SLOT(inputChanged()));
-   connect(xdInput, SIGNAL(textChanged(const QString&)), SLOT(inputChanged()));
-   connect(xoInput, SIGNAL(textChanged(const QString&)), SLOT(inputChanged()));
+   connect(angInput, SIGNAL(textChanged(QString)), SLOT(inputChanged()));
+   connect(zlInput, SIGNAL(textChanged(QString)), SLOT(inputChanged()));
+   connect(dlInput, SIGNAL(textChanged(QString)), SLOT(inputChanged()));
+   connect(xdInput, SIGNAL(textChanged(QString)), SLOT(inputChanged()));
+   connect(xoInput, SIGNAL(textChanged(QString)), SLOT(inputChanged()));
 
    checkBoxToggled();
 }
@@ -2924,8 +3222,7 @@ I2MProgDialog::I2MProgDialog(QWidget * parent, Qt::WindowFlags f) : QDialog(pare
    setupUi(this);
    setWindowTitle(tr("Convert program inch to metric"));
 
-
-   connect(mInput, SIGNAL(textChanged(const QString&)), this, SLOT(inputChanged()));
+   connect(mInput, SIGNAL(textChanged(QString)), this, SLOT(inputChanged()));
 
 
    connect(okButton, SIGNAL(clicked()), SLOT(accept()));
@@ -3018,7 +3315,7 @@ SetupDialog::SetupDialog( QWidget* parent, const _editor_properites* prop, Qt::W
    connect(browseButton, SIGNAL(clicked()), SLOT(browseButtonClicked()));
 
    colorButtons = new QButtonGroup(this);
-   connect(colorButtons, SIGNAL(buttonClicked(QAbstractButton *)), SLOT(changeColor(QAbstractButton *)));
+   connect(colorButtons, SIGNAL(buttonClicked(QAbstractButton*)), SLOT(changeColor(QAbstractButton *)));
 
 
    palette.setColor(backgroundColorButton->foregroundRole(), prop->hColors.backgroundColor);
@@ -3175,6 +3472,7 @@ SetupDialog::SetupDialog( QWidget* parent, const _editor_properites* prop, Qt::W
        firstCommCheckBox->setChecked(true);
 
    highlightModeComboBox->addItem(tr("AUTO"), MODE_AUTO);
+   highlightModeComboBox->addItem(tr("SODICK"), MODE_SODICK);
    highlightModeComboBox->addItem(tr("FANUC"), MODE_FANUC);
    highlightModeComboBox->addItem(tr("HEIDENHAIN DIALOG"), MODE_HEIDENHAIN);
    highlightModeComboBox->addItem(tr("HEIDENHAIN ISO"), MODE_HEIDENHAIN_ISO);

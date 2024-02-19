@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
 
    app.setActivationWindow(mw, false);
 
-   QObject::connect(&app, SIGNAL(messageReceived(const QString&)), mw, SLOT(messReceived(const QString&)));
+   QObject::connect(&app, SIGNAL(messageReceived(QString)), mw, SLOT(messReceived(QString)));
 
    QObject::connect(mw, SIGNAL(needToShow()), &app, SLOT(activateWindow()));
 

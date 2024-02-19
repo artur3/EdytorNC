@@ -51,8 +51,10 @@ HEADERS  += edytornc.h\
 
 
 FORMS    += edytornc.ui\
+    ertorquedialog.ui \
         i2mdialog.ui \
     feedsdialog.ui \
+    polygondialog.ui \
     renumberdialog.ui \
     dotdialog.ui \
     triangledialog.ui \
