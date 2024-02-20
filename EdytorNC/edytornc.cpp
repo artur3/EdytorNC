@@ -745,8 +745,8 @@ bool EdytorNc::findNext()
     if(!findEdit->text().isEmpty() && hasMdiChild)
     {
         found = activeMdiChild()->findNext(findEdit->text(),
-                                           ((mCheckFindWholeWords->isChecked() ? QTextDocument::FindWholeWords : QTextDocument::FindFlags(0)) |
-                                            (!mCheckIgnoreCase->isChecked() ? QTextDocument::FindCaseSensitively : QTextDocument::FindFlags(0))),
+                                           ((mCheckFindWholeWords->isChecked() ? QTextDocument::FindWholeWords : QTextDocument::FindFlags()) |
+                                            (!mCheckIgnoreCase->isChecked() ? QTextDocument::FindCaseSensitively : QTextDocument::FindFlags())),
                                            mCheckIgnoreComments->isChecked());
 
         palette.setColor(QPalette::Base, QColor(Qt::red).lighter(160));
@@ -766,6 +766,28 @@ bool EdytorNc::findNext()
 //
 //**************************************************************************************************
 
+void EdytorNc::nexttc()
+{
+    bool found = false;
+    QPalette palette;
+
+    found = activeMdiChild()->findTCText(((mCheckFindWholeWords->isChecked() ? QTextDocument::FindWholeWords : QTextDocument::FindFlags()) |
+                                          (!mCheckIgnoreCase->isChecked() ? QTextDocument::FindCaseSensitively : QTextDocument::FindFlags())),
+                                         mCheckIgnoreComments->isChecked());
+
+    palette.setColor(QPalette::Base, QColor(Qt::red).lighter(160));
+
+    if(found)
+        findEdit->setPalette(QPalette());
+    //    else
+    //        findEdit->setPalette(palette);
+    return;
+}
+
+//**************************************************************************************************
+//
+//**************************************************************************************************
+
 bool EdytorNc::findPrevious()
 {
     bool hasMdiChild = (activeMdiChild() != nullptr);
@@ -778,8 +800,8 @@ bool EdytorNc::findPrevious()
     if(!findEdit->text().isEmpty() && hasMdiChild)
     {
         found = activeMdiChild()->findNext(findEdit->text(), QTextDocument::FindBackward |
-                                           ((mCheckFindWholeWords->isChecked() ? QTextDocument::FindWholeWords : QTextDocument::FindFlags(0)) |
-                                            (!mCheckIgnoreCase->isChecked() ? QTextDocument::FindCaseSensitively : QTextDocument::FindFlags(0))),
+                                           ((mCheckFindWholeWords->isChecked() ? QTextDocument::FindWholeWords : QTextDocument::FindFlags()) |
+                                            (!mCheckIgnoreCase->isChecked() ? QTextDocument::FindCaseSensitively : QTextDocument::FindFlags())),
                                            mCheckIgnoreComments->isChecked());
 
         palette.setColor(QPalette::Base, QColor(Qt::red).lighter(160));
@@ -794,6 +816,30 @@ bool EdytorNc::findPrevious()
     findPreviousAct->setEnabled(true);
 
     return found;
+}
+
+//**************************************************************************************************
+//
+//**************************************************************************************************
+
+void EdytorNc::prevtc()
+{
+    bool found = false;
+    QPalette palette;
+
+    found = activeMdiChild()->findTCText(QTextDocument::FindBackward |
+                                             ((mCheckFindWholeWords->isChecked() ? QTextDocument::FindWholeWords : QTextDocument::FindFlags()) |
+                                              (!mCheckIgnoreCase->isChecked() ? QTextDocument::FindCaseSensitively : QTextDocument::FindFlags())),
+                                         mCheckIgnoreComments->isChecked());
+
+    palette.setColor(QPalette::Base, QColor(Qt::red).lighter(160));
+
+    if(found)
+        findEdit->setPalette(QPalette());
+    //    else
+    //        findEdit->setPalette(palette);
+
+    return;
 }
 
 //**************************************************************************************************
@@ -814,8 +860,8 @@ void EdytorNc::replaceNext()
     {
 
         found = activeMdiChild()->replaceNext(findEdit->text(), replaceEdit->text(),
-                                              ((mCheckFindWholeWords->isChecked() ? QTextDocument::FindWholeWords : QTextDocument::FindFlags(0)) |
-                                               (!mCheckIgnoreCase->isChecked() ? QTextDocument::FindCaseSensitively : QTextDocument::FindFlags(0))),
+                                              ((mCheckFindWholeWords->isChecked() ? QTextDocument::FindWholeWords : QTextDocument::FindFlags()) |
+                                               (!mCheckIgnoreCase->isChecked() ? QTextDocument::FindCaseSensitively : QTextDocument::FindFlags())),
                                               mCheckIgnoreComments->isChecked());
 
         palette.setColor(QPalette::Base, QColor(Qt::red).lighter(160));
@@ -849,8 +895,8 @@ void EdytorNc::replacePrevious()
     {
 
         found = activeMdiChild()->replaceNext(findEdit->text(), replaceEdit->text(), QTextDocument::FindBackward |
-                                              ((mCheckFindWholeWords->isChecked() ? QTextDocument::FindWholeWords : QTextDocument::FindFlags(0)) |
-                                               (!mCheckIgnoreCase->isChecked() ? QTextDocument::FindCaseSensitively : QTextDocument::FindFlags(0))),
+                                              ((mCheckFindWholeWords->isChecked() ? QTextDocument::FindWholeWords : QTextDocument::FindFlags()) |
+                                               (!mCheckIgnoreCase->isChecked() ? QTextDocument::FindCaseSensitively : QTextDocument::FindFlags())),
                                               mCheckIgnoreComments->isChecked());
 
         palette.setColor(QPalette::Base, QColor(Qt::red).lighter(160));
@@ -885,8 +931,8 @@ void EdytorNc::replaceAll()
         QApplication::setOverrideCursor(Qt::BusyCursor);
 
         found = activeMdiChild()->replaceAll(findEdit->text(), replaceEdit->text(),
-                                             ((mCheckFindWholeWords->isChecked() ? QTextDocument::FindWholeWords : QTextDocument::FindFlags(0)) |
-                                              (!mCheckIgnoreCase->isChecked() ? QTextDocument::FindCaseSensitively : QTextDocument::FindFlags(0))),
+                                             ((mCheckFindWholeWords->isChecked() ? QTextDocument::FindWholeWords : QTextDocument::FindFlags()) |
+                                              (!mCheckIgnoreCase->isChecked() ? QTextDocument::FindCaseSensitively : QTextDocument::FindFlags())),
                                              mCheckIgnoreComments->isChecked());
 
         palette.setColor(QPalette::Base, QColor(Qt::red).lighter(160));
@@ -1352,6 +1398,38 @@ void EdytorNc::doChamfer()
 //
 //**************************************************************************************************
 
+void EdytorNc::doPolygons()
+{
+    PolygonDialog *polygonDialog;
+    polygonDialog = findChild<PolygonDialog *>();
+    if(!polygonDialog)
+    {
+        PolygonDialog *polygonDialog = new PolygonDialog(this);
+        polygonDialog->move((geometry().x() + width() - 10) - polygonDialog->width(), geometry().y()+35);
+        polygonDialog->show();
+    };
+}
+
+//**************************************************************************************************
+//
+//**************************************************************************************************
+
+void EdytorNc::doErTorque()
+{
+    ErTorqueDialog *ertorqueDialog;
+    ertorqueDialog = findChild<ErTorqueDialog *>();
+    if(!ertorqueDialog)
+    {
+        ErTorqueDialog *ertorqueDialog = new ErTorqueDialog(this);
+        ertorqueDialog->move((geometry().x() + width() - 10) - ertorqueDialog->width(), geometry().y()+35);
+        ertorqueDialog->show();
+    };
+}
+
+//**************************************************************************************************
+//
+//**************************************************************************************************
+
 void EdytorNc::doTriangles()
 {
     TriangleDialog *triangleDialog;
@@ -1412,7 +1490,7 @@ void EdytorNc::doConvertProg()
 //**************************************************************************************************
 
 void EdytorNc::doCalc()
-{
+{   
     if(defaultMdiWindowProperites.calcBinary.isEmpty())
     {
         QMessageBox::information(this, tr("Information"),
@@ -1426,11 +1504,16 @@ void EdytorNc::doCalc()
     {
         proc = new QProcess(this);
         proc->setObjectName("Calc569");
-        proc->start(defaultMdiWindowProperites.calcBinary);
+        //proc->start(defaultMdiWindowProperites.calcBinary);
+        proc->setProgram(defaultMdiWindowProperites.calcBinary);
+        proc->start();
     }
     else
-        if(proc->processId() == 0)
-            proc->start(defaultMdiWindowProperites.calcBinary);
+        if(proc->processId() == 0) {
+            //proc->start(defaultMdiWindowProperites.calcBinary);
+            proc->setProgram(defaultMdiWindowProperites.calcBinary);
+            proc->start();
+    }
 }
 
 //**************************************************************************************************
@@ -1643,8 +1726,8 @@ void EdytorNc::updateMenus()
     {
         if(findToolBar)
             activeMdiChild()->highlightFindText(findEdit->text(),
-                                                ((mCheckFindWholeWords->isChecked() ? QTextDocument::FindWholeWords : QTextDocument::FindFlags(0)) |
-                                                 (!mCheckIgnoreCase->isChecked() ? QTextDocument::FindCaseSensitively : QTextDocument::FindFlags(0))), mCheckIgnoreComments->isChecked());
+                                                ((mCheckFindWholeWords->isChecked() ? QTextDocument::FindWholeWords : QTextDocument::FindFlags()) |
+                                                 (!mCheckIgnoreCase->isChecked() ? QTextDocument::FindCaseSensitively : QTextDocument::FindFlags())), mCheckIgnoreComments->isChecked());
         else
             activeMdiChild()->highlightFindText("");
 
@@ -1920,6 +2003,16 @@ void EdytorNc::createActions()
     selAllAct->setToolTip(tr("Select all text"));
     connect(selAllAct, SIGNAL(triggered()), this, SLOT(selAll()));
 
+    nexttcAct = new QAction(QIcon(":/images/nexttc.png"), tr("Next tool change"), this);
+    nexttcAct->setShortcut(tr("Ctrl+Down"));
+    nexttcAct->setToolTip(tr("Next tool change"));
+    connect(nexttcAct, SIGNAL(triggered()), this, SLOT(nexttc()));
+
+    prevtcAct = new QAction(QIcon(":/images/prevtc.png"), tr("Previous tool change"), this);
+    prevtcAct->setShortcut(tr("Ctrl+Up"));
+    prevtcAct->setToolTip(tr("Previous tool change"));
+    connect(prevtcAct, SIGNAL(triggered()), this, SLOT(prevtc()));
+
     readOnlyAct = new QAction(QIcon(":/images/unlock.png"), tr("Read &only"), this);
     readOnlyAct->setShortcut(tr("F12"));
     readOnlyAct->setCheckable(true);
@@ -1985,6 +2078,14 @@ void EdytorNc::createActions()
     //chamferAct->setShortcut(tr("F9"));
     chamferAct->setToolTip(tr("Calculate chamfer"));
     connect(chamferAct, SIGNAL(triggered()), this, SLOT(doChamfer()));
+
+    ertorqueAct = new QAction(QIcon(":/images/ertorque.png"), tr("ER torque table"), this);
+    ertorqueAct->setToolTip(tr("ER torque table"));
+    connect(ertorqueAct, SIGNAL(triggered()), this, SLOT(doErTorque()));
+
+    polygonAct = new QAction(QIcon(":/images/polygon.png"), tr("Solution of polygons"), this);
+    polygonAct->setToolTip(tr("Solution of polygons"));
+    connect(polygonAct, SIGNAL(triggered()), this, SLOT(doPolygons()));
 
     trianglesAct = new QAction(QIcon(":/images/triangles.png"), tr("Solution of triangles"), this);
     //trianglesAct->setShortcut(tr("F9"));
@@ -2186,6 +2287,9 @@ void EdytorNc::createMenus()
     editMenu->addSeparator();
     editMenu->addAction(selAllAct);
     editMenu->addSeparator();
+    editMenu->addAction(nexttcAct);
+    editMenu->addAction(prevtcAct);
+    editMenu->addSeparator();
     editMenu->addAction(findAct);
     editMenu->addAction(replaceAct);
 
@@ -2223,11 +2327,13 @@ void EdytorNc::createMenus()
     toolsMenu->addSeparator();
     toolsMenu->addAction(bhcAct);
     toolsMenu->addAction(speedFeedAct);
+    toolsMenu->addAction(polygonAct);
     toolsMenu->addAction(trianglesAct);
     toolsMenu->addAction(chamferAct);
     toolsMenu->addAction(convertAct);
     toolsMenu->addAction(convertProgAct);
     toolsMenu->addSeparator();
+    toolsMenu->addAction(ertorqueAct);
     toolsMenu->addAction(cmpMacroAct);
     toolsMenu->addSeparator();
     toolsMenu->addAction(inLineCalcAct);
@@ -2283,6 +2389,9 @@ void EdytorNc::createToolBars()
     editToolBar->addSeparator();
     editToolBar->addAction(selAllAct);
     editToolBar->addSeparator();
+    editToolBar->addAction(nexttcAct);
+    editToolBar->addAction(prevtcAct);
+    editToolBar->addSeparator();
     editToolBar->addAction(findAct);
     editToolBar->addAction(replaceAct);
     editToolBar->addSeparator();
@@ -2308,11 +2417,13 @@ void EdytorNc::createToolBars()
     toolsToolBar->addSeparator();
     toolsToolBar->addAction(bhcAct);
     toolsToolBar->addAction(speedFeedAct);
+    toolsToolBar->addAction(polygonAct);
     toolsToolBar->addAction(trianglesAct);
     toolsToolBar->addAction(chamferAct);
     toolsToolBar->addAction(convertAct);
     toolsToolBar->addAction(convertProgAct);
     toolsToolBar->addSeparator();
+    toolsToolBar->addAction(ertorqueAct);
     toolsToolBar->addAction(cmpMacroAct);
     toolsToolBar->addSeparator();
     toolsToolBar->addAction(calcAct);
@@ -2342,6 +2453,7 @@ void EdytorNc::createStatusBar()
     highlightTypeCombo->setEditable(false);
     highlightTypeCombo->addItem(tr("AUTO"), MODE_AUTO);
     highlightTypeCombo->addItem(tr("FANUC"), MODE_FANUC);
+    highlightTypeCombo->addItem(tr("SODICK W-EDM"), MODE_SODICK);
     highlightTypeCombo->addItem(tr("HEIDENHAIN DIALOG"), MODE_HEIDENHAIN);
     highlightTypeCombo->addItem(tr("HEIDENHAIN ISO"), MODE_HEIDENHAIN_ISO);
     highlightTypeCombo->addItem(tr("OKUMA OSP"), MODE_OKUMA);
@@ -2436,12 +2548,14 @@ void EdytorNc::readSettings()
     else
     {
         fileChangeMonitor = new QFileSystemWatcher(this);
-        connect(fileChangeMonitor, SIGNAL(fileChanged(const QString)), this, SLOT(fileChanged(const QString)));
+        //connect(fileChangeMonitor, SIGNAL(fileChanged(const QString)), this, SLOT(fileChanged(const QString)));
+        connect(fileChangeMonitor, SIGNAL(fileChanged(QString)), this, SLOT(fileChanged(QString)));
     };
 
     restoreState(settings.value("State", QByteArray()).toByteArray());
 
-    lastDir = settings.value("LastDir",  QDir::homePath()).toString();
+    //lastDir = settings.value("LastDir",  QDir::homePath()).toString();
+    lastDir.setPath(settings.value("LastDir",  QDir::homePath()).toString());
 
     defaultMdiWindowProperites.extensions = settings.value("Extensions", (QStringList() << "*.nc" <<  "*.cnc")).toStringList();
     defaultMdiWindowProperites.saveExtension = settings.value("DefaultSaveExtension", "*.nc").toString();
@@ -2511,6 +2625,8 @@ void EdytorNc::readSettings()
     defaultMdiWindowProperites.hColors.zColor = settings.value("ZColor", 0x000080).toInt();
     defaultMdiWindowProperites.hColors.aColor = settings.value("AColor", 0x000000).toInt();
     defaultMdiWindowProperites.hColors.bColor = settings.value("BColor", 0x000000).toInt();
+    defaultMdiWindowProperites.hColors.cColor = settings.value("CColor", 0x996600).toInt();
+    defaultMdiWindowProperites.hColors.hColor = settings.value("HColor", 0xff9900).toInt();
     defaultMdiWindowProperites.hColors.defaultColor = settings.value("DefaultColor", 0x000000).toInt();
     defaultMdiWindowProperites.hColors.backgroundColor = settings.value("BackgroundColor", 0xFFFFFF).toInt();
     settings.endGroup();
@@ -2667,6 +2783,8 @@ void EdytorNc::writeSettings()
     settings.setValue("BColor", defaultMdiWindowProperites.hColors.bColor);
     settings.setValue("AColor", defaultMdiWindowProperites.hColors.aColor);
     settings.setValue("ZColor", defaultMdiWindowProperites.hColors.zColor);
+    settings.setValue("CColor", defaultMdiWindowProperites.hColors.cColor);
+    settings.setValue("HColor", defaultMdiWindowProperites.hColors.hColor);
     settings.setValue("DefaultColor", defaultMdiWindowProperites.hColors.defaultColor);
     settings.setValue("BackgroundColor", defaultMdiWindowProperites.hColors.backgroundColor);
 
@@ -2856,7 +2974,14 @@ void EdytorNc::loadFoundedFile(const QString &fileName)
 void EdytorNc::messReceived(const QString &text)
 {
     QString str = text;
-    QStringList list1 = str.split(";", QString::SkipEmptyParts);
+    //QStringList list1 = str.split(";", QString::SkipEmptyParts);
+    #if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+        auto whichVerToUse = QString::SkipEmptyParts;
+    #else
+        auto whichVerToUse = Qt::SkipEmptyParts;
+    #endif
+        QStringList list1 = str.split(";", whichVerToUse);
+
     for(int i = 0; i < list1.size(); ++i)
         openFile(list1.at(i));
     emit needToShow();
@@ -2990,8 +3115,8 @@ void EdytorNc::createFindToolBar()
         findEdit->setFocus(Qt::MouseFocusReason);
 
         activeMdiChild()->highlightFindText(findEdit->text(),
-                                            ((mCheckFindWholeWords->isChecked() ? QTextDocument::FindWholeWords : QTextDocument::FindFlags(0)) |
-                                             (!mCheckIgnoreCase->isChecked() ? QTextDocument::FindCaseSensitively : QTextDocument::FindFlags(0))), mCheckIgnoreComments->isChecked());
+                                            ((mCheckFindWholeWords->isChecked() ? QTextDocument::FindWholeWords : QTextDocument::FindFlags()) |
+                                             (!mCheckIgnoreCase->isChecked() ? QTextDocument::FindCaseSensitively : QTextDocument::FindFlags())), mCheckIgnoreComments->isChecked());
 
     };
     findEdit->selectAll();
@@ -3338,7 +3463,8 @@ void EdytorNc::createUserToolTipsFile()
 
     fileName += "/cnc_tips.txt";
 
-    if(QFileInfo(fileName).exists())
+    //if(QFileInfo(fileName).exists())
+    if(QFileInfo::exists(fileName))
         openFile(fileName);
     else
     {
@@ -3382,7 +3508,8 @@ void EdytorNc::createGlobalToolTipsFile()
     QString fileName = writeTooltipFile();
 
 
-    if(QFileInfo(fileName).exists())
+    //if(QFileInfo(fileName).exists())
+    if(QFileInfo::exists(fileName))
         openFile(fileName);
     QMdiSubWindow *existing = findMdiChild(fileName);
     if(existing)
@@ -4531,7 +4658,13 @@ void EdytorNc::savePrinterSettings(QPrinter *printer)
 
     settings.setValue("PrinterName", printer->printerName());
     settings.setValue("CollateCopies", printer->collateCopies());
-    settings.setValue("Orientation", printer->orientation());
+    //settings.setValue("Orientation", printer->orientation());
+    #if QT_VERSION < QT_VERSION_CHECK(5, 3, 0)
+        settings.setValue("Orientation", printer->orientation());
+    #else
+        settings.setValue("Orientation", printer->pageLayout().orientation());
+    #endif
+
     settings.setValue("ColorMode", printer->colorMode());
 
     QPageLayout layout = printer->pageLayout();
@@ -4564,7 +4697,13 @@ void EdytorNc::loadPrinterSettings(QPrinter *printer)
 
     printer->setPrinterName(settings.value("PrinterName").toString());
     printer->setCollateCopies(settings.value("CollateCopies").toBool());
-    printer->setOrientation((QPrinter::Orientation)settings.value("Orientation").toInt());
+    //printer->setOrientation((QPrinter::Orientation)settings.value("Orientation").toInt());
+    #if QT_VERSION < QT_VERSION_CHECK(5, 3, 0)
+        printer->setOrientation((QPrinter::Orientation)settings.value("Orientation").toInt());
+    #else
+        printer->pageLayout().setOrientation((QPageLayout::Orientation)
+                                             settings.value("Orientation").toInt());
+    #endif
     printer->setColorMode((QPrinter::ColorMode)settings.value("ColorMode").toInt());
 
     QPageLayout layout = printer->pageLayout();
@@ -4775,6 +4914,7 @@ void EdytorNc::startSerialPortServer()
 {
 
     QString fileName, path;
+    qint64 pid;
 
     path = QApplication::applicationDirPath() + "/";
     path = QDir::toNativeSeparators(path);
@@ -4796,7 +4936,9 @@ void EdytorNc::startSerialPortServer()
         sfsProc = new QProcess(this);
         sfsProc->setObjectName("SerialPortFileServerApp");
         sfsProc->setWorkingDirectory(path);
-        sfsProc->startDetached(fileName);
+        sfsProc->setProgram(fileName);
+        //sfsProc->startDetached(fileName);
+        sfsProc->startDetached(&pid);
 
 //        qDebug() << QDir::toNativeSeparators(path) << fileName << sfsProc;
 //        qDebug() << sfsProc->errorString() << sfsProc->error();
@@ -4805,7 +4947,9 @@ void EdytorNc::startSerialPortServer()
         if(sfsProc->processId() == 0)
         {
             sfsProc->setWorkingDirectory(path);
-            sfsProc->startDetached(fileName);
+            sfsProc->setProgram(fileName);
+            sfsProc->startDetached(&pid);
+            //sfsProc->startDetached(fileName);
         };
 
 }
@@ -4819,6 +4963,7 @@ void EdytorNc::startFTPServer()
 {
 
     QString fileName, path;
+    qint64 pid;
 
     path = QApplication::applicationDirPath() + "/";
     path = QDir::toNativeSeparators(path);
@@ -4840,7 +4985,9 @@ void EdytorNc::startFTPServer()
         FTPserverProc = new QProcess(this);
         FTPserverProc->setObjectName("FTPserverApp");
         FTPserverProc->setWorkingDirectory(path);
-        FTPserverProc->startDetached(fileName);
+        FTPserverProc->setProgram(fileName);
+        FTPserverProc->startDetached(&pid);
+        //FTPserverProc->startDetached(fileName);
 
 //        qDebug() << QDir::toNativeSeparators(path) << fileName << sfsProc;
 //        qDebug() << sfsProc->errorString() << sfsProc->error();
@@ -4849,7 +4996,9 @@ void EdytorNc::startFTPServer()
         if(FTPserverProc->processId() == 0)
         {
             FTPserverProc->setWorkingDirectory(path);
-            FTPserverProc->startDetached(fileName);
+            FTPserverProc->setProgram(fileName);
+            FTPserverProc->startDetached(&pid);
+            //FTPserverProc->startDetached(fileName);
         };
 
 }
@@ -4862,6 +5011,7 @@ void EdytorNc::openProgramManager()
 {
 
     QString fileName, path;
+    qint64 pid;
 
     path = QApplication::applicationDirPath() + "/";
     path = QDir::toNativeSeparators(path);
@@ -4882,7 +5032,9 @@ void EdytorNc::openProgramManager()
         ProgManProc = new QProcess(this);
         ProgManProc->setObjectName("ProgManApp");
         ProgManProc->setWorkingDirectory(path);
-        ProgManProc->startDetached(fileName);
+        ProgManProc->setProgram(fileName);
+        ProgManProc->startDetached(&pid);
+        //ProgManProc->startDetached(fileName);
 
 //        qDebug() << QDir::toNativeSeparators(path) << fileName << sfsProc;
 //        qDebug() << sfsProc->errorString() << sfsProc->error();
@@ -4891,7 +5043,9 @@ void EdytorNc::openProgramManager()
         if(ProgManProc->processId() == 0)
         {
             ProgManProc->setWorkingDirectory(path);
-            ProgManProc->startDetached(fileName);
+        ProgManProc->setProgram(fileName);
+            //ProgManProc->startDetached(fileName);
+            ProgManProc->startDetached(&pid);
         };
 
 }

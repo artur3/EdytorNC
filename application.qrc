@@ -111,5 +111,10 @@
         <file>images/serial.svg</file>
         <file>images/programmanager.svg</file>
         <file>images/refresh.png</file>
+        <file>images/nexttc.png</file>
+        <file>images/prevtc.png</file>
+        <file>images/ertorque.png</file>
+        <file>images/polygon.png</file>
+        <file>images/polygons.png</file>
     </qresource>
 </RCC>

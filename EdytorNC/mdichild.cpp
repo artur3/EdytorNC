@@ -1466,6 +1466,8 @@ bool MdiChild::event(QEvent *event)
          break;
       case MODE_FANUC            : group = QLatin1String("FANUC");
          break;
+      case MODE_SODICK           : group = QLatin1String("SODICK");
+          break;
       case MODE_SINUMERIK_840    : group = QLatin1String("SINUMERIK_840");
          break;
       case MODE_PHILIPS          :
@@ -3128,6 +3130,110 @@ bool MdiChild::findText(const QString &text, QTextDocument::FindFlags options, b
    textEdit->setUpdatesEnabled(true);
    return found;
 }
+
+//**************************************************************************************************
+//
+//**************************************************************************************************
+
+bool MdiChild::findTCText(QTextDocument::FindFlags options, bool ignoreComments)
+{
+    bool found, inComment, isRegExp, isRegExpMinMax, ok;
+    QTextCursor cursor;
+    QString cur_line, exp, sval, text;
+    int cur_line_column;
+    int commentPos, id;
+    QRegExp regExp;
+    double min, max;
+    Qt::CaseSensitivity caseSensitivity;
+
+
+    inComment = false;
+    found = false;
+    isRegExp = false;
+    isRegExpMinMax = false;
+    max = 0;
+    min = 0;
+
+    if(options & QTextDocument::FindCaseSensitively)
+        caseSensitivity = Qt::CaseSensitive;
+    else
+        caseSensitivity = Qt::CaseInsensitive;
+
+    isRegExp = true;
+    textEdit->setUpdatesEnabled(false);
+    cursor = textEdit->textCursor();
+
+    do
+    {
+        regExp.setPattern(QString("\\bM0?6\\b"));
+        regExp.setCaseSensitivity(caseSensitivity);
+
+        cursor = textEdit->document()->find(regExp, cursor, options);
+
+        found = !cursor.isNull();
+        if(found)
+        {
+            if(!isRegExpMinMax)
+                textEdit->setTextCursor(cursor);
+        }
+        else
+        {
+            break;
+        }
+        found = textEdit->find(exp, options);
+        cursor = textEdit->textCursor();
+
+        cur_line = cursor.block().text();
+        cur_line_column = cursor.columnNumber();
+
+        if(found && ignoreComments)
+        {
+            id = highligthMode();
+            if((id == MODE_SINUMERIK_840) || (id == MODE_HEIDENHAIN_ISO) || (id == MODE_HEIDENHAIN))
+                commentPos  = cur_line.indexOf(QLatin1Char(';'), 0);
+            else
+            {
+                if((id == MODE_AUTO) || (id == MODE_OKUMA) || (id == MODE_SINUMERIK) || (id == MODE_PHILIPS))
+                    commentPos  = cur_line.indexOf(QLatin1Char('('), 0);
+                else
+                {
+                    commentPos  = cur_line.indexOf(QLatin1Char('('), 0);
+                    if(commentPos > cur_line_column)
+                        commentPos = -1;
+
+                    if(commentPos < 0)
+                        commentPos  = cur_line.indexOf(QLatin1Char(';'), 0);
+                };
+            };
+
+            if(commentPos < 0)
+                commentPos = cur_line_column + 1;
+
+            inComment = (commentPos < cur_line_column);
+        }
+        else
+            inComment = false;
+
+        if((isRegExpMinMax && found) && !inComment)
+        {
+            sval = cursor.selectedText();
+            double val = QString(sval).remove(exp, caseSensitivity).toDouble(&ok);
+
+            if(((val >= min) && (val <= max)))
+            {
+                inComment = false;
+                textEdit->setTextCursor(cursor);
+            }
+            else
+                inComment = true;
+        };
+
+    }while(inComment);
+
+    textEdit->setUpdatesEnabled(true);
+    return found;
+}
+
 
 //**************************************************************************************************
 // Tries to guess the file name

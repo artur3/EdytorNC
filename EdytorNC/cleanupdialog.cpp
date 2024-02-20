@@ -139,7 +139,7 @@ cleanUpDialog::cleanUpDialog(QWidget *parent) :
     connect(ui->okPushButton, SIGNAL(clicked()), this, SLOT(okButtonClicked()));
 
 
-    connect(ui->tableWidget, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(contextMenuReq(const QPoint &)));
+    connect(ui->tableWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenuReq(QPoint)));
     ui->tableWidget->setSelectionMode(QAbstractItemView::NoSelection);
 
 }

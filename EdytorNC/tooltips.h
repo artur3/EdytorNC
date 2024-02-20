@@ -794,6 +794,82 @@ QString writeTooltipFile()
     settings.endGroup();  //  MACH3
     //*******************************************************************************************************************//
 
+    //*******************************************************************************************************************//
+    settings.beginGroup("SODICK");  //  SODICK
+    //*******************************************************************************************************************//
+
+    settings.setValue("T90", QT_TR_NOOP("<b>T90</b> - Wire cut"));
+    settings.setValue("G00", QT_TR_NOOP("<b>G00</b> - Rapid motion"));
+    settings.setValue("G01", QT_TR_NOOP("<b>G01</b> - linear interpolation"));
+    settings.setValue("G02", QT_TR_NOOP("<b>G02</b> - Circular motion CW"));
+    settings.setValue("G03", QT_TR_NOOP("<b>G03</b> - Circular motion CCW"));
+    settings.setValue("G04", QT_TR_NOOP("<b>G04</b> - Dwell"));
+    settings.setValue("G05", QT_TR_NOOP("<b>G05</b> - X-axis mirror"));
+    settings.setValue("G06", QT_TR_NOOP("<b>G06</b> - Y-axis mirror"));
+    settings.setValue("G08", QT_TR_NOOP("<b>G08</b> - X-Y exchange"));
+    settings.setValue("G09", QT_TR_NOOP("<b>G09</b> - Cancel G05, G06, G08"));
+    settings.setValue("G11", QT_TR_NOOP("<b>G11</b> - Block skip on: activates / code in .nc prg"));
+    settings.setValue("G12", QT_TR_NOOP("<b>G12</b> - Block skip off"));
+    settings.setValue("G13", QT_TR_NOOP("<b>G13</b> - AWT ref, 1: wire break recovery with c888"));
+    settings.setValue("G14", QT_TR_NOOP("<b>G14</b> - AWT ref, 0: wire break recovery off"));
+    settings.setValue("G15", QT_TR_NOOP("<b>G15</b> - AWT ref, 2: wire break recovery without c888"));
+    settings.setValue("G20", QT_TR_NOOP("<b>G20</b> - Inch mode"));
+    settings.setValue("G21", QT_TR_NOOP("<b>G21</b> - Metric mode"));
+    settings.setValue("G22", QT_TR_NOOP("<b>G22</b> - Soft limit on"));
+    settings.setValue("G23", QT_TR_NOOP("<b>G23</b> - Soft limit off"));
+    settings.setValue("G26", QT_TR_NOOP("<b>G26</b> - Pattern rotation on: G26 RA45.0"));
+    settings.setValue("G27", QT_TR_NOOP("<b>G27</b> - Pattern rotation off"));
+    settings.setValue("G28", QT_TR_NOOP("<b>G28</b> - Return to G29 reference point"));
+    settings.setValue("G29", QT_TR_NOOP("<b>G29</b> - Reference point for AWT position"));
+    settings.setValue("G30", QT_TR_NOOP("<b>G30</b> - Return to last G92 location"));
+    settings.setValue("G40", QT_TR_NOOP("<b>G40</b> - Wire radius compensation cancel: must be during movement"));
+    settings.setValue("G41", QT_TR_NOOP("<b>G41</b> - Wire radius compensation left"));
+    settings.setValue("G42", QT_TR_NOOP("<b>G42</b> - Wire radius compensation right"));
+    settings.setValue("G50", QT_TR_NOOP("<b>G50</b> - Taper cancel: during next movement"));
+    settings.setValue("G51", QT_TR_NOOP("<b>G51</b> - Taper left"));
+    settings.setValue("G52", QT_TR_NOOP("<b>G52</b> - Taper right"));
+    settings.setValue("G54", QT_TR_NOOP("<b>G54</b> - Coordinate system"));
+    settings.setValue("G74", QT_TR_NOOP("<b>G74</b> - 4 axis on"));
+    settings.setValue("G75", QT_TR_NOOP("<b>G75</b> - 4 axis off"));
+    settings.setValue("G80", QT_TR_NOOP("<b>G80</b> - Sensor touch: beware of wire radius"));
+    settings.setValue("G81", QT_TR_NOOP("<b>G81</b> - Move to limits"));
+    settings.setValue("G82", QT_TR_NOOP("<b>G82</b> - Move halfway of axis display"));
+    settings.setValue("G83", QT_TR_NOOP("<b>G83</b> - Read current position and store in a H register"));
+    settings.setValue("G90", QT_TR_NOOP("<b>G90</b> - Set absolute mode"));
+    settings.setValue("G91", QT_TR_NOOP("<b>G91</b> - Set incremental mode"));
+    settings.setValue("G92", QT_TR_NOOP("<b>G92</b> - Assign values to axis disply in current wcs"));
+    settings.setValue("G97", QT_TR_NOOP("<b>G97</b> - Assign values to axis in all wcs"));
+    settings.setValue("G104", QT_TR_NOOP("<b>G104</b> - Dwell at all sharp corners"));
+    settings.setValue("G105", QT_TR_NOOP("<b>G105</b> - Cancel G104"));
+    settings.setValue("G140", QT_TR_NOOP("<b>G140</b> - 4 axis offset off"));
+    settings.setValue("G141", QT_TR_NOOP("<b>G141</b> - 4 axis offset left"));
+    settings.setValue("G142", QT_TR_NOOP("<b>G142</b> - 4 axis offset right"));
+    settings.setValue("M00", QT_TR_NOOP("<b>M00</b> - Program stop"));
+    settings.setValue("M01", QT_TR_NOOP("<b>M01</b> - Optional stop"));
+    settings.setValue("M02", QT_TR_NOOP("<b>M02</b> - End of program"));
+    settings.setValue("M03", QT_TR_NOOP("<b>M03</b> - AWT jump"));
+    settings.setValue("M05", QT_TR_NOOP("<b>M05</b> - Sensor touch off"));
+    settings.setValue("M06", QT_TR_NOOP("<b>M06</b> - Disable EDM power during movement"));
+    settings.setValue("M33", QT_TR_NOOP("<b>M33</b> - Rotate wire tip disposal arm forward"));
+    settings.setValue("M43", QT_TR_NOOP("<b>M43</b> - Rotate wire tip disposal arm back"));
+    settings.setValue("M98", QT_TR_NOOP("<b>M98</b> - Jump to a sub-routine from main program"));
+    settings.setValue("M99", QT_TR_NOOP("<b>M99</b> - Return from a sub-routine to the main program"));
+    settings.setValue("T80", QT_TR_NOOP("<b>T80</b> - Wire run"));
+    settings.setValue("T81", QT_TR_NOOP("<b>T81</b> - Wire stop"));
+    settings.setValue("T82", QT_TR_NOOP("<b>T82</b> - Tank dreain closed"));
+    settings.setValue("T83", QT_TR_NOOP("<b>T83</b> - Tank drain open"));
+    settings.setValue("T84", QT_TR_NOOP("<b>T84</b> - High presure flushing on"));
+    settings.setValue("T85", QT_TR_NOOP("<b>T85</b> - High presure flushing off"));
+    settings.setValue("T86", QT_TR_NOOP("<b>T86</b> - Flushing pump on"));
+    settings.setValue("T87", QT_TR_NOOP("<b>T87</b> - Flushing pump off"));
+    settings.setValue("T89", QT_TR_NOOP("<b>T89</b> - Switch to non-submerged machining"));
+    settings.setValue("T91", QT_TR_NOOP("<b>T91</b> - Wire thread"));
+    settings.setValue("T96", QT_TR_NOOP("<b>T96</b> - Tank fill pump on"));
+    settings.setValue("T97", QT_TR_NOOP("<b>T97</b> - Tank fill pump off"));
+
+    //*******************************************************************************************************************//
+    settings.endGroup();  //  SODICK
+    //*******************************************************************************************************************//
 
     return fileName;
 

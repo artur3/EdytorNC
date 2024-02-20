@@ -44,6 +44,7 @@
 #define MODE_TOOLTIPS            0x09
 #define MODE_LINUXCNC            0x0A
 #define MODE_MACH3               0x0B
+#define MODE_SODICK              0x0C
 //#define MODE_FADAL               0x0B
 
 
@@ -56,6 +57,7 @@
 #define FILENAME_HEID2       "(BEGIN)(\\sPGM\\s)[a-zA-Z0-9_-+*]{1,}(\\sMM|\\sINCH)"
 #define FILENAME_PHIL        "%PM[\\s]{1,}N[0-9]{4,4}"
 #define FILENAME_FADAL       "(N1)(O|:)[0-9]{1,}"
+#define FILENAME_SODICK      "(A-Z)[0-9]{1,}"
 
 
 struct _h_colors
@@ -75,6 +77,8 @@ struct _h_colors
    int zColor;
    int aColor;
    int bColor;
+   int hColor;
+   int cColor;
    int defaultColor;
    int backgroundColor;
    int highlightMode;

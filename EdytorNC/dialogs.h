@@ -39,6 +39,9 @@
 #include "ui_chamferdialog.h"
 #include "ui_i2mprogdialog.h"
 #include "ui_setupdialog.h"
+#include "ui_ertorquedialog.h"
+#include "ui_polygondialog.h"
+
 
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -186,6 +189,69 @@ class DotDialog : public QDialog, private Ui::DotDialog
     void spinBoxVal(int val);
 
   private:
+
+};
+
+/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+=========================================================================================
+
+=========================================================================================
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+class PolygonDialog : public QDialog, private Ui::PolygonDialog
+{
+    Q_OBJECT
+
+public:
+    PolygonDialog( QWidget * parent = 0, Qt::WindowFlags f = Qt::Dialog);
+
+    ~PolygonDialog();
+
+protected:
+    bool eventFilter(QObject *obj, QEvent *ev);
+
+protected slots:
+
+
+private slots:
+    void computeButtonClicked();
+    void clearButtonClicked();
+    void noOfSidesChanged();
+    void calcChanged();
+
+private:
+    uint mode;
+    QPixmap *pic1;
+    double pi = 3.1415926535898;
+    void calc_have_outr(int);
+    void calc_have_inr(int);
+    void calc_have_len(int);
+    void calc_ina(int);
+    void calc_exa(int);
+    void calc_have_area(int);
+    QDoubleValidator *aAInputValid;
+    QDoubleValidator *aBInputValid;
+    QDoubleValidator *aCInputValid;
+    QDoubleValidator *aDInputValid;
+    QDoubleValidator *aEInputValid;
+    QDoubleValidator *aFInputValid;
+
+};
+/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+=========================================================================================
+
+=========================================================================================
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+class ErTorqueDialog : public QDialog, private Ui::ErTorqueDialog
+{
+    Q_OBJECT
+
+public:
+    ErTorqueDialog( QWidget * parent = 0, Qt::WindowFlags f = Qt::Dialog);
+
+    ~ErTorqueDialog();
+
 
 };
 

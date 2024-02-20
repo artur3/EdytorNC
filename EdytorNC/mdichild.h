@@ -66,6 +66,7 @@ public:
     void doInsertDot();
     void doI2M();
     int compileMacro();
+    //void highlightFindText(QString searchString, QTextDocument::FindFlags options = 0, bool ignoreComments = true);
     void highlightFindText(QString searchString, QTextDocument::FindFlags options = 0, bool ignoreComments = true);
     void doUndo();
     void doRedo();
@@ -84,6 +85,7 @@ public:
     void semiComment();
     void paraComment();
     bool findNext(QString textToFind, QTextDocument::FindFlags options, bool ignoreComments);
+    bool findTCText(QTextDocument::FindFlags options, bool ignoreComments);
     bool replaceNext(QString textToFind, QString replacedText, QTextDocument::FindFlags options, bool ignoreComments);
     bool replaceAll(QString textToFind, QString replacedText, QTextDocument::FindFlags options, bool ignoreComments);
     bool swapAxes(QString textToFind, QString replacedText, double min, double max, int oper, double modifier, QTextDocument::FindFlags options, bool ignoreComments, int prec);
@@ -118,7 +120,7 @@ private:
     void macroShowError(int error, QString tx);
     void macroShowBasicError(int error);
     void detectHighligthMode();
-    bool findText(const QString &text, QTextDocument::FindFlags options = 0, bool ignoreComments = true);
+    bool findText(const QString &text, QTextDocument::FindFlags options, bool ignoreComments = true);
     void fileChangeMonitorAddPath(QString fileName);
     void fileChangeMonitorRemovePath(QString fileName);
 

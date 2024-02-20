@@ -52,6 +52,7 @@ protected:
 private:
     void highlightInside(const QString &tx, int pos, int maxlen);
     void loadRules();
+    void highlightBlockSodickRule(const QString &text);
     void highlightBlockSinuRule(const QString &text);
     void highlightBlockFanucRule(const QString &text);
     void highlightBlockOkumaRule(const QString &text);

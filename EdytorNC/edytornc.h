@@ -103,6 +103,8 @@ private slots:
     void replacePrevious();
     void replaceAll();
     void selAll();
+    void nexttc();
+    void prevtc();
     void config();
     void doBhc();
     void doInsertSpaces();
@@ -114,6 +116,8 @@ private slots:
     void doRenumber();
     void doSpeedFeed();
     void doChamfer();
+    void doPolygons();
+    void doErTorque();
     void doTriangles();
     void doConvert();
     void doConvertProg();
@@ -299,6 +303,9 @@ private:
     QAction *selAllAct;
     QAction *readOnlyAct;
 
+    QAction *nexttcAct;
+    QAction *prevtcAct;
+
     QAction *configAct;
 
     QAction *bhcAct;
@@ -312,6 +319,8 @@ private:
     QAction *insertSpcAct;
     QAction *speedFeedAct;
     QAction *chamferAct;
+    QAction *polygonAct;
+    QAction *ertorqueAct;
     QAction *trianglesAct;
     QAction *convertAct;
     QAction *convertProgAct;
